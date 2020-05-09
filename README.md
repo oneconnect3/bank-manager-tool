@@ -1,91 +1,93 @@
-# vue-admin-template
-
-English | [简体中文](./README-zh.md)
-
-> A minimal vue admin template with Element UI & axios & iconfont & permission control & lint
-
-**Live demo:** http://panjiachen.github.io/vue-admin-template
-
-
-**The current version is `v4.0+` build on `vue-cli`. If you want to use the old version , you can switch branch to [tag/3.11.0](https://github.com/PanJiaChen/vue-admin-template/tree/tag/3.11.0), it does not rely on `vue-cli`**
-
-## Build Setup
-
-
+## 1、首页
 ```bash
-# clone the project
-git clone https://github.com/PanJiaChen/vue-admin-template.git
-
-# enter the project directory
-cd vue-admin-template
-
-# install dependency
-npm install
-
-# develop
-npm run dev
+静态内容的dashboard，包括最新产品等
 ```
 
-This will automatically open http://localhost:9528
-
-## Build
-
+## 2、查一查
 ```bash
-# build for test environment
-npm run build:stage
+搜索框
 
-# build for production environment
-npm run build:prod
+filter（可选：发行银行、投资类型、预期收益率、是否在售）
+
+返回列表
+
+点开产品可以查看详情
 ```
 
-## Advanced
-
+## 3、比一比
 ```bash
-# preview the release environment effect
-npm run preview
-
-# preview the release environment effect + static resource analysis
-npm run preview -- --report
-
-# code format check
-npm run lint
-
-# code format check and auto fix
-npm run lint -- --fix
+对比两个银行的产品结构
 ```
 
-Refer to [Documentation](https://panjiachen.github.io/vue-element-admin-site/guide/essentials/deploy.html) for more information
+## 4、测一测
+```bash
+根据N个维度（包括静态和动态），预测产品销量，返回预测结果和变量影响度
+```
 
-## Demo
 
-![demo](https://github.com/PanJiaChen/PanJiaChen.github.io/blob/master/images/demo.gif)
+## 数据字段
+```bash
+发行银行：        平安银行
 
-## Extra
+产品名称：
 
-If you want router permission && generate menu by user roles , you can use this branch [permission-control](https://github.com/PanJiaChen/vue-admin-template/tree/permission-control)
+是否保本：        是
 
-For `typescript` version, you can use [vue-typescript-admin-template](https://github.com/Armour/vue-typescript-admin-template) (Credits: [@Armour](https://github.com/Armour))
+委托币种：        人民币
 
-## Related Project
+投资类型：        混合型        
 
-- [vue-element-admin](https://github.com/PanJiaChen/vue-element-admin)
+收益类型：        浮动收益
 
-- [electron-vue-admin](https://github.com/PanJiaChen/electron-vue-admin)
+委托币种起始金额：        10000
 
-- [vue-typescript-admin-template](https://github.com/Armour/vue-typescript-admin-template)
+预期收益率(%)：        4.00       
 
-- [awesome-project](https://github.com/PanJiaChen/vue-element-admin/issues/2312)
+起始金额递增单位：        1000
 
-## Browsers support
+发行起始日期：        2020年4月14日
 
-Modern browsers and Internet Explorer 10+.
+发行终止日期：        2020年4月16日
 
-| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)</br>Safari |
-| --------- | --------- | --------- | --------- |
-| IE10, IE11, Edge| last 2 versions| last 2 versions| last 2 versions
+收益起始日期：        2020年4月17日
 
-## License
+收益终止日期：        2020年10月16日
 
-[MIT](https://github.com/PanJiaChen/vue-admin-template/blob/master/LICENSE) license.
+发行量 待定 评估可行性
 
-Copyright (c) 2017-present PanJiaChen
+销售进度 待定 评估可行性
+```
+
+## 银行
+```bash
+Top10 股份制银行
+
+	1. 招商银行
+
+	2. 光大银行
+
+	3. 兴业银行
+
+	4. 平安银行
+
+	5. 浙商银行
+
+	6. 民生银行
+
+	7. 浦发银行
+
+	8. 中信银行
+
+	9. 广发银行
+
+	10. 华夏银行
+
+source：https://www.wf4b.com/baike/1645.html
+```
+
+## 产品分类
+```bash
+第九条　商业银行应当根据投资性质的不同，将理财产品分为固定收益类理财产品、权益类理财产品、商品及金融衍生品类理财产品和混合类理财产品。固定收益类理财产品投资于存款、债券等债权类资产的比例不低于80%；权益类理财产品投资于权益类资产的比例不低于80%；商品及金融衍生品类理财产品投资于商品及金融衍生品的比例不低于80%；混合类理财产品投资于债权类资产、权益类资产、商品及金融衍生品类资产且任一资产的投资比例未达到前三类理财产品标准。
+
+source：http://www.gov.cn/gongbao/content/2018/content_5350052.htm <商业银行理财业务监督管理办法>
+ ```

@@ -1,27 +1,45 @@
 <template>
   <div class="prod_info" style="margin-top: 15px;">
-    <el-input placeholder="输入产品关键字" v-model="search_keyword.key">
-      <el-select v-model="bank_name" slot="prepend" placeholder="发行银行">
-        <el-option label="招商银行" value="1"></el-option>
-        <el-option label="平安银行" value="2"></el-option>
-      </el-select>
-      <el-select v-model="prod_type" slot="prepend" style="margin-left: 20px;" placeholder="投资类型">
-        <el-option label="结构型" value="1"></el-option>
-        <el-option label="混合型" value="2"></el-option>
+    <el-input placeholder="输入产品关键字" v-model="search_keyword.prod_name">
+      <el-select v-model="search_keyword.bank_name" slot="prepend" placeholder="发行银行">
+        <el-option label="中国银行" value="中国银行"></el-option>
+        <el-option label="民生银行" value="民生银行"></el-option>
       </el-select>
       <el-select
-        v-model="prod_return"
+        v-model="search_keyword.prod_type"
         slot="prepend"
-        style="margin-left: 20px;"
-        placeholder="预期收益率"
+        style="margin-left: 15px;"
+        placeholder="投资类型"
       >
-        <el-option label="3%以下" value="1"></el-option>
-        <el-option label="3%~5%" value="2"></el-option>
-        <el-option label="5%以上" value="3"></el-option>
+        <el-option label="结构型" value="结构型"></el-option>
+        <el-option label="混合型" value="混合型"></el-option>
       </el-select>
-      <el-select v-model="if_sale" slot="prepend" style="margin-left: 20px;" placeholder="是否在售">
-        <el-option label="是" value="1"></el-option>
-        <el-option label="否" value="2"></el-option>
+      <el-select
+        v-model="search_keyword.prod_return"
+        slot="prepend"
+        style="margin-left: 15px;"
+        placeholder="收益率(%)"
+      >
+        <el-option label="1.5%以下" value="1.5%以下"></el-option>
+        <el-option label="1.5%~2%" value="1.5%~2%"></el-option>
+        <el-option label="2%~2.5%" value="2%~2.5%"></el-option>
+        <el-option label="2.5%~3%" value="2.5%~3%"></el-option>
+        <el-option label="3%~3.5%" value="3%~3.5%"></el-option>
+        <el-option label="3.5%~4%" value="3.5%~4%"></el-option>
+        <el-option label="4%~4.5%" value="4%~4.5%"></el-option>
+        <el-option label="4.5%~5%" value="4.5%~5%"></el-option>
+        <el-option label="5%以上" value="5%以上"></el-option>
+      </el-select>
+      <el-select
+        v-model="search_keyword.duration"
+        slot="prepend"
+        style="margin-left: 50px;"
+        placeholder="产品期限(月)"
+      >
+        <el-option label="3个月以下" value="3个月以下"></el-option>
+        <el-option label="3~6个月" value="3~6个月"></el-option>
+        <el-option label="6~12个月" value="6~12个月"></el-option>
+        <el-option label="12个月以上" value="12个月以上"></el-option>
       </el-select>
       <el-button slot="append" icon="el-icon-search" @click="onsubmit();"></el-button>
     </el-input>
@@ -31,6 +49,14 @@
         <span>搜索结果</span>
       </div>
       <div>{{ serverResponse }}</div>
+      <el-table :data="prod_list" stripe border fit>
+        <el-table-column prop="name" label="产品名称" width="350"></el-table-column>
+        <el-table-column prop="bank" label="发行银行" width="200"></el-table-column>
+        <el-table-column prop="type" label="投资类型" width="200"></el-table-column>
+        <el-table-column prop="profit" label="预期收益率" width="200"></el-table-column>
+        <el-table-column prop="duration" label="产品期限" width="200"></el-table-column>
+        <el-table-column prop="detail" label="查看详情" width="200"></el-table-column>        
+      </el-table>
     </el-card>
   </div>
 </template>
@@ -55,8 +81,16 @@ export default {
       // prod_type: "",
       // prod_return: "",
       // if_sale: "",
-      search_keyword: {key:''},
-      serverResponse: ""
+      search_keyword: {
+        bank_name: "",
+        prod_type: "",
+        prod_return: "",
+        duration: "",
+        prod_name: "",
+        detail: ""
+      },
+      serverResponse: "",
+      prod_list: []
     };
   },
 
@@ -72,9 +106,13 @@ export default {
           // 这里服务器返回的 response 为一个 json object，可通过如下方法需要转成 json 字符串
           // 可以直接通过 response.data 取key-value
           // 坑一：这里不能直接使用 this 指针，不然找不到对象
-          var msg = response.data.msg.price;
+          // var msg = response.data.msg.price;
+
           // 坑二：这里直接按类型解析，若再通过 JSON.stringify(msg) 转，会得到带双引号的字串
-          prod.serverResponse = msg;
+          // prod.serverResponse = msg;
+
+          var rs = response.data.msg;
+          prod.prod_list = rs;
 
           // alert(
           //   "Success " + response.status + ", " + response.data + ", " + msg

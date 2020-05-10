@@ -28,10 +28,24 @@ def home():
         prod_type = keyword['prod_type']
         prod_return = keyword['prod_return']
         duration = keyword['duration']
+        prod_name = keyword['prod_name']
 
-        prod_rs = df[['产品名称', '发行银行', '投资类型', '预期收益率(%)','委托管理期(月)']]
+        if bank_name == '不限':
+            bank_name = ''
+
+        if prod_type == '不限':
+            prod_type = ''
+
+        if prod_return == '不限':
+            prod_return = ''
+
+        if duration == '不限':
+            duration = ''
+
+        prod_rs = df[['产品名称', '发行银行', '投资类型', '委托币种起始金额', '预期收益率(%)','委托管理期(月)']]
         prod_rs['预期收益率(%)'] = prod_rs['预期收益率(%)'].astype(float)
         prod_rs['委托管理期(月)'] = prod_rs['委托管理期(月)'].astype(float)
+        prod_rs['委托币种起始金额'] = prod_rs['委托币种起始金额'].astype(float)
 
         if bank_name != '':
             prod_rs = prod_rs[prod_rs['发行银行'] == bank_name]
@@ -69,18 +83,26 @@ def home():
             elif duration == '12个月以上':
                 prod_rs = prod_rs[prod_rs['委托管理期(月)'] >= 12]
 
+        if prod_name != '':
+            prod_rs = prod_rs[prod_rs['产品名称'].str.contains(prod_name)]
 
-        prod_rs.columns = ['name', 'bank', 'type', 'profit', 'duration']
+        prod_rs.columns = ['name', 'bank', 'type', 'amount', 'profit', 'duration']
+
+        prod_rs['amount'] = prod_rs['amount'].apply(lambda x: round(x/10000, 2))
 
         # # 单个产品的详情
-        # prod_rs['detail'] = prod_rs['name'].apply(lambda x: str(df[df['产品名称']==x].to_dict(orient='records')))
-
+        # prod_rs['all_info'] = prod_rs['name'].apply(lambda x: str(df[df['产品名称']==x][['name', 'bank', 'type']].to_dict(orient='records')))
+        prod_rs['all_info'] = prod_rs['name'].apply(lambda x: prod_rs[prod_rs['name']==x][['name', 'bank', 'type']].to_dict(orient='records'))
+        print(prod_rs['all_info'])
         prod_json = prod_rs.to_dict(orient='records')
 
         print(prod_json)
+
+        prod_cnt = prod_rs.shape[0]
        
         response_object = {
-            'msg': prod_json
+            'prod_data': prod_json,
+            'prod_cnt': prod_cnt
         }
 
     else:

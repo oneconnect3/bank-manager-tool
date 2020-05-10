@@ -1,7 +1,8 @@
 <template>
-  <div class="prod_info" style="margin-top: 15px;">
+  <div class="prod_info" style="margin-left:10px; margin-top: 15px; margin-right: 10px">
     <el-input placeholder="输入产品关键字" v-model="search_keyword.prod_name">
       <el-select v-model="search_keyword.bank_name" slot="prepend" placeholder="发行银行">
+        <el-option label="发行银行" value="不限"></el-option>
         <el-option label="中国银行" value="中国银行"></el-option>
         <el-option label="民生银行" value="民生银行"></el-option>
       </el-select>
@@ -9,8 +10,10 @@
         v-model="search_keyword.prod_type"
         slot="prepend"
         style="margin-left: 15px;"
-        placeholder="投资类型"
+        placeholder="产品类型"
       >
+        <el-option label="产品类型" value="不限"></el-option>
+
         <el-option label="结构型" value="结构型"></el-option>
         <el-option label="混合型" value="混合型"></el-option>
       </el-select>
@@ -20,6 +23,8 @@
         style="margin-left: 15px;"
         placeholder="收益率(%)"
       >
+        <el-option label="收益率(%)" value="不限"></el-option>
+
         <el-option label="1.5%以下" value="1.5%以下"></el-option>
         <el-option label="1.5%~2%" value="1.5%~2%"></el-option>
         <el-option label="2%~2.5%" value="2%~2.5%"></el-option>
@@ -36,6 +41,8 @@
         style="margin-left: 50px;"
         placeholder="产品期限(月)"
       >
+        <el-option label="产品期限(月)" value="不限"></el-option>
+
         <el-option label="3个月以下" value="3个月以下"></el-option>
         <el-option label="3~6个月" value="3~6个月"></el-option>
         <el-option label="6~12个月" value="6~12个月"></el-option>
@@ -44,19 +51,32 @@
       <el-button slot="append" icon="el-icon-search" @click="onsubmit();"></el-button>
     </el-input>
 
-    <el-card class="box-card" v-if="showResults">
+    <el-card class="box-card" v-if="showResults" style="margin-top: 10px">
       <div slot="header" class="clearfix">
         <span>搜索结果</span>
       </div>
-      <div>{{ serverResponse }}</div>
+      <!-- <div>{{ serverResponse }}</div> -->
       <el-table :data="prod_list" stripe border fit>
-        <el-table-column prop="name" label="产品名称" width="350"></el-table-column>
-        <el-table-column prop="bank" label="发行银行" width="200"></el-table-column>
-        <el-table-column prop="type" label="投资类型" width="200"></el-table-column>
-        <el-table-column prop="profit" label="预期收益率" width="200"></el-table-column>
-        <el-table-column prop="duration" label="产品期限" width="200"></el-table-column>
-        <el-table-column prop="detail" label="查看详情" width="200"></el-table-column>        
+        <el-table-column prop="name" label="产品名称"></el-table-column>
+        <el-table-column prop="bank" label="发行银行"></el-table-column>
+        <el-table-column prop="type" label="产品类型"></el-table-column>
+        <el-table-column prop="amount" label="起存金额（万元）"></el-table-column>
+        <el-table-column prop="profit" label="预期收益率（%）"></el-table-column>
+        <el-table-column prop="duration" label="产品期限（月）"></el-table-column>
+        <el-table-column prop="all_info" label="产品详情">
+          <template slot-scope="scope">
+            <el-popover trigger="click">
+              <el-table :data="scope.row.all_info">
+                <el-table-column property="name" label="产品名称"></el-table-column>
+                <el-table-column property="bank" label="发行银行"></el-table-column>
+                <el-table-column property="type" label="投资类型"></el-table-column>
+              </el-table>
+              <el-button slot="reference">查看</el-button>
+            </el-popover>
+          </template>
+        </el-table-column>
       </el-table>
+      <div style="margin-top: 30px;" center><span style="margin-right: 30px">为您找到 {{ prod_cnt }} 个符合条件的产品</span></div>
     </el-card>
   </div>
 </template>
@@ -86,11 +106,12 @@ export default {
         prod_type: "",
         prod_return: "",
         duration: "",
-        prod_name: "",
-        detail: ""
+        prod_name: ""
       },
-      serverResponse: "",
-      prod_list: []
+      // serverResponse: "",
+      prod_list: [],
+      gridData: [],
+      prod_cnt: ""
     };
   },
 
@@ -111,8 +132,11 @@ export default {
           // 坑二：这里直接按类型解析，若再通过 JSON.stringify(msg) 转，会得到带双引号的字串
           // prod.serverResponse = msg;
 
-          var rs = response.data.msg;
+          var rs = response.data.prod_data;
           prod.prod_list = rs;
+
+          var cnt = response.data.prod_cnt;
+          prod.prod_cnt = cnt;
 
           // alert(
           //   "Success " + response.status + ", " + response.data + ", " + msg

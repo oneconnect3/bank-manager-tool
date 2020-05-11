@@ -1,6 +1,10 @@
 <template>
   <div class="prod_info" style="margin-left:10px; margin-top: 15px; margin-right: 10px">
-    <el-input placeholder="输入产品关键字" v-model="search_keyword.prod_name">
+    <el-input
+      placeholder="输入产品关键字"
+      v-model="search_keyword.prod_name"
+      @keyup.enter.native="onsubmit"
+    >
       <el-select
         v-model="search_keyword.bank_name"
         slot="prepend"
@@ -11,7 +15,7 @@
         <el-option label="发行银行" value="不限"></el-option>
         <el-option label="中国银行" value="中国银行"></el-option>
         <el-option label="招商银行" value="招商银行"></el-option>
-        <el-option label="光大银行" value="光大银行"></el-option>
+        <el-option label="华夏银行" value="华夏银行"></el-option>
         <el-option label="平安银行" value="平安银行"></el-option>
         <el-option label="民生银行" value="民生银行"></el-option>
         <el-option label="建设银行" value="建设银行"></el-option>
@@ -80,7 +84,12 @@
         <span>搜索结果（0 代表未知信息）</span>
       </div>
       <!-- <div>{{ serverResponse }}</div> -->
-      <el-table :data="prod_list" stripe border fit>
+      <el-table
+        :data="prod_list"
+        stripe
+        fit
+        :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+      >
         <el-table-column prop="name" label="产品名称"></el-table-column>
         <el-table-column prop="bank" label="发行银行"></el-table-column>
         <el-table-column prop="type" label="产品类型"></el-table-column>
@@ -90,11 +99,40 @@
         <el-table-column prop="duration" label="产品期限（月）"></el-table-column>
         <el-table-column prop="all_info" label="产品详情">
           <template slot-scope="scope">
-            <el-popover trigger="click">
-              <el-table :data="scope.row.all_info">
-                <el-table-column property="name" label="产品名称"></el-table-column>
+            <el-popover trigger="click" width="800">
+              <div style="margin-bottom: 20px;">
+                <div>
+                  <img :src="scope.row.all_info[0].img_url" />
+                </div>
+                <div style="margin-top: 10px;">
+                  <span>【{{ scope.row.all_info[0].name }}】</span>
+                </div>
+              </div>
+              <el-table
+                border
+                :data="scope.row.all_info"
+                :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+              >
                 <el-table-column property="bank" label="发行银行"></el-table-column>
-                <el-table-column property="type" label="投资类型"></el-table-column>
+                <el-table-column property="type" label="产品类型"></el-table-column>
+                <el-table-column property="currency" label="委托币种"></el-table-column>
+              </el-table>
+              <el-table
+                border
+                :data="scope.row.all_info"
+                :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+              >
+                <el-table-column property="if_safe" label="是否保本"></el-table-column>
+                <el-table-column property="start_date" label="发行起始日期"></el-table-column>
+                <el-table-column property="end_date" label="发行终止日期"></el-table-column>
+              </el-table>
+              <el-table
+                border
+                :data="scope.row.all_info"
+                :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+              >
+                <el-table-column property="if_impawn" label="可否质押"></el-table-column>
+
               </el-table>
               <el-button slot="reference">查看</el-button>
             </el-popover>
@@ -151,14 +189,6 @@ export default {
       axios
         .post(path, prod.search_keyword)
         .then(response => {
-          // 这里服务器返回的 response 为一个 json object，可通过如下方法需要转成 json 字符串
-          // 可以直接通过 response.data 取key-value
-          // 坑一：这里不能直接使用 this 指针，不然找不到对象
-          // var msg = response.data.msg.price;
-
-          // 坑二：这里直接按类型解析，若再通过 JSON.stringify(msg) 转，会得到带双引号的字串
-          // prod.serverResponse = msg;
-
           var rs = response.data.prod_data;
           prod.prod_list = rs;
 

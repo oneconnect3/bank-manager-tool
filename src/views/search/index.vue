@@ -1,16 +1,36 @@
 <template>
   <div class="prod_info" style="margin-left:10px; margin-top: 15px; margin-right: 10px">
     <el-input placeholder="输入产品关键字" v-model="search_keyword.prod_name">
-      <el-select v-model="search_keyword.bank_name" slot="prepend" placeholder="发行银行">
+      <el-select
+        v-model="search_keyword.bank_name"
+        slot="prepend"
+        placeholder="发行银行"
+        filterable
+        :filter-method="dataFilter"
+      >
         <el-option label="发行银行" value="不限"></el-option>
         <el-option label="中国银行" value="中国银行"></el-option>
+        <el-option label="招商银行" value="招商银行"></el-option>
+        <el-option label="光大银行" value="光大银行"></el-option>
+        <el-option label="平安银行" value="平安银行"></el-option>
         <el-option label="民生银行" value="民生银行"></el-option>
+        <el-option label="建设银行" value="建设银行"></el-option>
+        <el-option label="广州农商" value="广州农商"></el-option>
+        <el-option label="农业银行" value="农业银行"></el-option>
+        <el-option label="交通银行" value="交通银行"></el-option>
+        <el-option label="兴业银行" value="兴业银行"></el-option>
+        <el-option label="晋商银行" value="晋商银行"></el-option>
+        <el-option label="工商银行" value="工商银行"></el-option>
+        <el-option label="吉林银行" value="吉林银行"></el-option>
+        <el-option label="青岛银行" value="青岛银行"></el-option>
       </el-select>
       <el-select
         v-model="search_keyword.prod_type"
         slot="prepend"
         style="margin-left: 15px;"
         placeholder="产品类型"
+        filterable
+        :filter-method="dataFilter"
       >
         <el-option label="产品类型" value="不限"></el-option>
 
@@ -22,6 +42,8 @@
         slot="prepend"
         style="margin-left: 15px;"
         placeholder="收益率(%)"
+        filterable
+        :filter-method="dataFilter"
       >
         <el-option label="收益率(%)" value="不限"></el-option>
 
@@ -40,6 +62,8 @@
         slot="prepend"
         style="margin-left: 50px;"
         placeholder="产品期限(月)"
+        filterable
+        :filter-method="dataFilter"
       >
         <el-option label="产品期限(月)" value="不限"></el-option>
 
@@ -53,13 +77,14 @@
 
     <el-card class="box-card" v-if="showResults" style="margin-top: 10px">
       <div slot="header" class="clearfix">
-        <span>搜索结果</span>
+        <span>搜索结果（0 代表未知信息）</span>
       </div>
       <!-- <div>{{ serverResponse }}</div> -->
       <el-table :data="prod_list" stripe border fit>
         <el-table-column prop="name" label="产品名称"></el-table-column>
         <el-table-column prop="bank" label="发行银行"></el-table-column>
         <el-table-column prop="type" label="产品类型"></el-table-column>
+        <el-table-column prop="currency" label="委托币种"></el-table-column>
         <el-table-column prop="amount" label="起存金额（万元）"></el-table-column>
         <el-table-column prop="profit" label="预期收益率（%）"></el-table-column>
         <el-table-column prop="duration" label="产品期限（月）"></el-table-column>
@@ -76,7 +101,9 @@
           </template>
         </el-table-column>
       </el-table>
-      <div style="margin-top: 30px;" center><span style="margin-right: 30px">为您找到 {{ prod_cnt }} 个符合条件的产品</span></div>
+      <div style="margin-top: 30px;" center>
+        <span style="margin-right: 30px">为您找到 {{ prod_cnt }} 个符合条件的产品</span>
+      </div>
     </el-card>
   </div>
 </template>
@@ -147,6 +174,10 @@ export default {
         });
       this.showResults = true;
     }
+  },
+
+  mounted: function() {
+    this.onsubmit();
   }
 };
 </script>

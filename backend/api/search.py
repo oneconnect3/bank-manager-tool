@@ -42,7 +42,7 @@ def home():
         if duration == '不限':
             duration = ''
 
-        prod_rs = df[['产品名称', '发行银行', '投资类型', '委托币种起始金额', '预期收益率(%)','委托管理期(月)']]
+        prod_rs = df[['产品名称', '发行银行', '投资类型', '委托币种起始金额', '预期收益率(%)','委托管理期(月)', '委托币种']]
         prod_rs['预期收益率(%)'] = prod_rs['预期收益率(%)'].astype(float)
         prod_rs['委托管理期(月)'] = prod_rs['委托管理期(月)'].astype(float)
         prod_rs['委托币种起始金额'] = prod_rs['委托币种起始金额'].astype(float)
@@ -86,7 +86,7 @@ def home():
         if prod_name != '':
             prod_rs = prod_rs[prod_rs['产品名称'].str.contains(prod_name)]
 
-        prod_rs.columns = ['name', 'bank', 'type', 'amount', 'profit', 'duration']
+        prod_rs.columns = ['name', 'bank', 'type', 'amount', 'profit', 'duration', 'currency']
 
         prod_rs['amount'] = prod_rs['amount'].apply(lambda x: round(x/10000, 2))
 

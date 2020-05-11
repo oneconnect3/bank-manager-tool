@@ -24,8 +24,8 @@ export default {
   },
   data() {
     return {
-      title: 'Vue Admin Template',
-      logo: 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      title: '银查查',
+      logo: 'http://icons.iconarchive.com/icons/graphicloads/colorful-long-shadow/128/Bank-icon.png'
     }
   }
 }

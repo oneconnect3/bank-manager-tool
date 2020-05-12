@@ -1,5 +1,5 @@
 <template>
-  <div class="prod_info" style="margin-left:10px; margin-top: 15px; margin-right: 10px">
+  <el-main>
     <el-input
       placeholder="输入产品关键字"
       v-model="search_keyword.prod_name"
@@ -165,17 +165,17 @@
                 :header-cell-style="{background:'#eef1f6',color:'#606266'}"
               >
                 <el-table-column property="risk" label="投资风险说明"></el-table-column>
-              </el-table> -->
+              </el-table>-->
               <el-button slot="reference">查看</el-button>
             </el-popover>
           </template>
         </el-table-column>
       </el-table>
-      <div style="margin-top: 30px;" center>
-        <span style="margin-right: 30px">为您找到 {{ prod_cnt }} 个符合条件的产品。</span>
-      </div>
+      <el-footer style="margin-top: 30px">
+        <span>为您找到 {{ prod_cnt }} 个符合条件的产品。</span>
+      </el-footer>
     </el-card>
-  </div>
+  </el-main>
 </template>
 
 <style>

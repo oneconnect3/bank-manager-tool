@@ -1,63 +1,88 @@
 <template>
-  <div class="prod_info" style="margin-left:10px; margin-top: 15px; margin-right: 10px">
+  <el-main>
+    <span>&nbsp 请选择本行：</span>
     <el-select v-model="bank.bank1" placeholder="本行">
-      <el-option label="发行银行" value="不限"></el-option>
-      <el-option label="中国银行" value="中国银行"></el-option>
       <el-option label="招商银行" value="招商银行"></el-option>
-      <el-option label="华夏银行" value="华夏银行"></el-option>
-      <el-option label="平安银行" value="平安银行"></el-option>
-      <el-option label="民生银行" value="民生银行"></el-option>
-      <el-option label="建设银行" value="建设银行"></el-option>
-      <el-option label="广州农商" value="广州农商"></el-option>
-      <el-option label="农业银行" value="农业银行"></el-option>
-      <el-option label="交通银行" value="交通银行"></el-option>
+      <el-option label="光大银行" value="光大银行"></el-option>
       <el-option label="兴业银行" value="兴业银行"></el-option>
-      <el-option label="晋商银行" value="晋商银行"></el-option>
-      <el-option label="工商银行" value="工商银行"></el-option>
-      <el-option label="吉林银行" value="吉林银行"></el-option>
-      <el-option label="青岛银行" value="青岛银行"></el-option>
+      <el-option label="平安银行" value="平安银行"></el-option>
+      <el-option label="浙商银行" value="浙商银行"></el-option>
+      <el-option label="民生银行" value="民生银行"></el-option>
+      <el-option label="浦发银行" value="浦发银行"></el-option>
+      <el-option label="中信银行" value="中信银行"></el-option>
+      <el-option label="广发银行" value="广发银行"></el-option>
+      <el-option label="华夏银行" value="华夏银行"></el-option>
     </el-select>
-
+    <span>&nbsp&nbsp&nbsp&nbsp 对标行：</span>
     <el-select v-model="bank.bank2" placeholder="对标行">
-      <el-option label="发行银行" value="不限"></el-option>
-      <el-option label="中国银行" value="中国银行"></el-option>
       <el-option label="招商银行" value="招商银行"></el-option>
-      <el-option label="华夏银行" value="华夏银行"></el-option>
-      <el-option label="平安银行" value="平安银行"></el-option>
-      <el-option label="民生银行" value="民生银行"></el-option>
-      <el-option label="建设银行" value="建设银行"></el-option>
-      <el-option label="广州农商" value="广州农商"></el-option>
-      <el-option label="农业银行" value="农业银行"></el-option>
-      <el-option label="交通银行" value="交通银行"></el-option>
+      <el-option label="光大银行" value="光大银行"></el-option>
       <el-option label="兴业银行" value="兴业银行"></el-option>
-      <el-option label="晋商银行" value="晋商银行"></el-option>
-      <el-option label="工商银行" value="工商银行"></el-option>
-      <el-option label="吉林银行" value="吉林银行"></el-option>
-      <el-option label="青岛银行" value="青岛银行"></el-option>
-    </el-select>
-
+      <el-option label="平安银行" value="平安银行"></el-option>
+      <el-option label="浙商银行" value="浙商银行"></el-option>
+      <el-option label="民生银行" value="民生银行"></el-option>
+      <el-option label="浦发银行" value="浦发银行"></el-option>
+      <el-option label="中信银行" value="中信银行"></el-option>
+      <el-option label="广发银行" value="广发银行"></el-option>
+      <el-option label="华夏银行" value="华夏银行"></el-option>
+    </el-select>&nbsp&nbsp&nbsp&nbsp
     <el-button type="primary" round @click="onsubmit();">一键对比</el-button>
 
-    <el-card class="box-card" v-if="showResults" style="margin-top: 10px">
-      <div slot="header" class="clearfix">
-          <div style="margin-bottom: 20px">
-        <span>产品结构对比结果：</span>
-          </div>
-        <el-row>
+    <div style="margin-top: 20px">
+      <div>
+        <el-row type="flex">
           <el-col :span="12">
-            <el-card>
-              <span>{{ test_val }}</span>
+            <el-card shadow="hover">
+              <div slot="header" class="clearfix">
+                <span>产品结构对比</span>
+              </div>
+              <ve-histogram :data="chartData1" :settings="chartSettings"></ve-histogram>
             </el-card>
           </el-col>
           <el-col :span="12">
-            <el-card>
-              <span>{{ test_val }}</span>
+            <el-card shadow="hover">
+              <div slot="header" class="clearfix">
+                <span>卡片名称</span>
+              </div>
+              <div v-for="o in 4" :key="o" class="text item">{{'列表内容 ' + o }}</div>
             </el-card>
           </el-col>
         </el-row>
       </div>
-    </el-card>
-  </div>
+
+      <el-row>
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <div slot="header" class="clearfix">
+              <span>产品利率对比</span>
+            </div>
+            <ve-histogram :data="chartData2" :settings="chartSettings"></ve-histogram>
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <span>结论</span>
+          </el-card>
+        </el-col>
+      </el-row>
+
+      <el-row type="flex">
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <div slot="header" class="clearfix">
+              <span>产品期限对比</span>
+            </div>
+            <ve-histogram :data="chartData3" :settings="chartSettings"></ve-histogram>
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <span>结论</span>
+          </el-card>
+        </el-col>
+      </el-row>
+    </div>
+  </el-main>
 </template>
 
 
@@ -69,16 +94,34 @@
 
 <script>
 import axios from "axios";
+import VCharts from "v-charts";
 
 export default {
   data() {
+    this.chartSettings = {
+      metrics: [],
+      dimension: ["类别"],
+      xAxisName: [""],
+      yAxisName: ["占比（%）"]
+    };
     return {
       showResults: false,
       bank: {
         bank1: "",
         bank2: ""
       },
-      test_val: ""
+      chartData1: {
+        columns: [],
+        rows: []
+      },
+      chartData2: {
+        columns: [],
+        rows: []
+      },
+      chartData3: {
+        columns: [],
+        rows: []
+      }
     };
   },
 
@@ -91,8 +134,16 @@ export default {
       axios
         .post(path, prod.bank)
         .then(response => {
-          var rs = response.data.msg;
-          prod.test_val = rs;
+          var rs = response.data;
+          this.chartSettings.metrics = rs.bank_names;
+          prod.chartData1.columns = rs.struct_columns;
+          prod.chartData1.rows = rs.struct_data;
+
+          prod.chartData2.columns = rs.interest_columns;
+          prod.chartData2.rows = rs.interest_data;
+
+          prod.chartData3.columns = rs.contract_columns;
+          prod.chartData3.rows = rs.contract_data;
 
           // alert(
           //   "Success " + response.status + ", " + response.data + ", " + msg
@@ -103,6 +154,9 @@ export default {
         });
       this.showResults = true;
     }
+  },
+  mounted: function() {
+    this.onsubmit();
   }
 };
 </script>

@@ -167,6 +167,14 @@ def comparison():
     interest_rate_data = pd.read_csv('../data/interest_rate_data.csv', encoding='gbk')
     prod_contract_data = pd.read_csv('../data/prod_contract_data.csv', encoding='gbk')
 
+    bank_list = ['招商银行', '光大银行', '兴业银行', '平安银行', '浙商银行',
+    '民生银行', '浦发银行', '中信银行', '广发银行', '华夏银行']
+    print(bank_list)
+    for bank in bank_list:
+        prod_struct_data[bank] = prod_struct_data[bank].apply(lambda x: x*100)
+        interest_rate_data[bank] = interest_rate_data[bank].apply(lambda x: x*100)
+        prod_contract_data[bank] = prod_contract_data[bank].apply(lambda x: x*100)
+
     response_object = {}
     if request.method == 'POST':
         bank_names = request.get_json()
@@ -175,9 +183,47 @@ def comparison():
         bank1 = bank_names['bank1']
         bank2 = bank_names['bank2']
 
+        if bank1 == '':
+            bank1 = '招商银行'
+
+        if bank2 == '':
+            bank2 = '平安银行'
+
+        bank_names = [bank1, bank2]
+
+        # 产品类别分析
+        bank_struct_dim = '类别'
+        bank_struct_columns = [bank_struct_dim, bank1, bank2]
+
+        bank_struct_data = prod_struct_data[bank_struct_columns]
+        bank_struct_data = bank_struct_data.to_dict(orient='records')
+
+        # 产品利率分析
+        interest_rate_dim = '类别'
+        interest_rate_columns = [interest_rate_dim, bank1, bank2]
+
+        bank_interest_data = interest_rate_data[interest_rate_columns]
+        bank_interest_data = bank_interest_data.to_dict(orient='records')
+
+        # 产品期限分析
+        prod_contract_dim = '类别'
+        prod_contract_columns = [prod_contract_dim, bank1, bank2]
+
+        bank_contract_data = prod_contract_data[prod_contract_columns]
+        bank_contract_data = bank_contract_data.to_dict(orient='records')
+
         response_object = {
-            'msg': bank1 + bank2,
+            'bank_names': bank_names,
+            'struct_dim': bank_struct_dim,
+            'struct_columns': bank_struct_columns,
+            'struct_data': bank_struct_data,
+            'interest_columns': interest_rate_columns,
+            'interest_data': bank_interest_data,
+            'contract_columns': prod_contract_columns,
+            'contract_data': bank_contract_data
         }
+
+        print(response_object)
 
     else:
         response_object = '出错啦'

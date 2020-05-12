@@ -81,13 +81,14 @@
 
     <el-card class="box-card" v-if="showResults" style="margin-top: 10px">
       <div slot="header" class="clearfix">
-        <span>搜索结果（0 代表未知信息）</span>
+        <span>搜索结果:</span>
       </div>
       <!-- <div>{{ serverResponse }}</div> -->
       <el-table
         :data="prod_list"
         stripe
         fit
+        height="650px"
         :header-cell-style="{background:'#eef1f6',color:'#606266'}"
       >
         <el-table-column prop="name" label="产品名称"></el-table-column>
@@ -99,10 +100,15 @@
         <el-table-column prop="duration" label="产品期限（月）"></el-table-column>
         <el-table-column prop="all_info" label="产品详情">
           <template slot-scope="scope">
-            <el-popover trigger="click" width="800">
+            <el-popover trigger="click" width="800" style="font-size: 6px!important">
               <div style="margin-bottom: 20px;">
                 <div>
-                  <img :src="scope.row.all_info[0].img_url" />
+                  <el-image
+                    style="width: 100px; height: 100px"
+                    :src="scope.row.all_info[0].img_url"
+                    :fit="fit"
+                  ></el-image>
+                  <!-- <img :src="scope.row.all_info[0].img_url" /> -->
                 </div>
                 <div style="margin-top: 10px;">
                   <span>【{{ scope.row.all_info[0].name }}】</span>
@@ -116,31 +122,57 @@
                 <el-table-column property="bank" label="发行银行"></el-table-column>
                 <el-table-column property="type" label="产品类型"></el-table-column>
                 <el-table-column property="currency" label="委托币种"></el-table-column>
+                <el-table-column property="if_safe" label="是否保本"></el-table-column>
               </el-table>
               <el-table
                 border
                 :data="scope.row.all_info"
                 :header-cell-style="{background:'#eef1f6',color:'#606266'}"
               >
-                <el-table-column property="if_safe" label="是否保本"></el-table-column>
                 <el-table-column property="start_date" label="发行起始日期"></el-table-column>
                 <el-table-column property="end_date" label="发行终止日期"></el-table-column>
+                <el-table-column property="if_impawn" label="可否质押"></el-table-column>
+                <el-table-column property="if_redeem" label="客户是否有权提前赎回"></el-table-column>
               </el-table>
               <el-table
                 border
                 :data="scope.row.all_info"
                 :header-cell-style="{background:'#eef1f6',color:'#606266'}"
               >
-                <el-table-column property="if_impawn" label="可否质押"></el-table-column>
+                <el-table-column property="if_end" label="银行是否有权提前终止"></el-table-column>
 
+                <el-table-column property="area" label="适用地区"></el-table-column>
+                <el-table-column property="fee" label="产品管理费"></el-table-column>
+                <el-table-column property="cycle" label="付息周期(月)"></el-table-column>
               </el-table>
+              <!-- <el-table
+                border
+                :data="scope.row.all_info"
+                :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+              >
+                <el-table-column property="re_rule" label="申购赎回规定"></el-table-column>
+              </el-table>
+              <el-table
+                border
+                :data="scope.row.all_info"
+                :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+              >
+                <el-table-column property="target" label="投资对象"></el-table-column>
+              </el-table>
+              <el-table
+                border
+                :data="scope.row.all_info"
+                :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+              >
+                <el-table-column property="risk" label="投资风险说明"></el-table-column>
+              </el-table> -->
               <el-button slot="reference">查看</el-button>
             </el-popover>
           </template>
         </el-table-column>
       </el-table>
       <div style="margin-top: 30px;" center>
-        <span style="margin-right: 30px">为您找到 {{ prod_cnt }} 个符合条件的产品</span>
+        <span style="margin-right: 30px">为您找到 {{ prod_cnt }} 个符合条件的产品。</span>
       </div>
     </el-card>
   </div>
@@ -162,10 +194,6 @@ export default {
   data() {
     return {
       showResults: false,
-      // bank_name: "",
-      // prod_type: "",
-      // prod_return: "",
-      // if_sale: "",
       search_keyword: {
         bank_name: "",
         prod_type: "",

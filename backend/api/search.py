@@ -143,10 +143,7 @@ def search():
                                                     'start_date', 'end_date', 'if_impawn', 'img_url',
                                                     'if_redeem', 'if_end', 'area', 'fee', 'cycle']].to_dict(orient='records'))
         
-        print(prod_rs['all_info'])
         prod_json = prod_rs.to_dict(orient='records')
-
-        print(prod_json)
 
         prod_cnt = prod_rs.shape[0]
 
@@ -167,18 +164,23 @@ def comparison():
     interest_rate_data = pd.read_csv('../data/interest_rate_data.csv', encoding='gbk')
     prod_contract_data = pd.read_csv('../data/prod_contract_data.csv', encoding='gbk')
 
+
     bank_list = ['招商银行', '光大银行', '兴业银行', '平安银行', '浙商银行',
     '民生银行', '浦发银行', '中信银行', '广发银行', '华夏银行']
-    print(bank_list)
+
+    prod_list = ['结构性存款', '大额存单', '定期存款', '外币理财', '活期理财', '贵金属理财', '权益类理财']
+
     for bank in bank_list:
-        prod_struct_data[bank] = prod_struct_data[bank].apply(lambda x: x*100)
         interest_rate_data[bank] = interest_rate_data[bank].apply(lambda x: x*100)
         prod_contract_data[bank] = prod_contract_data[bank].apply(lambda x: x*100)
+
+    for col in prod_list:
+        prod_struct_data[col] = prod_struct_data[col].apply(lambda x: x*100)
+
 
     response_object = {}
     if request.method == 'POST':
         bank_names = request.get_json()
-        print(bank_names)
 
         bank1 = bank_names['bank1']
         bank2 = bank_names['bank2']
@@ -193,10 +195,12 @@ def comparison():
 
         # 产品类别分析
         bank_struct_dim = '类别'
-        bank_struct_columns = [bank_struct_dim, bank1, bank2]
+        bank_struct_columns = ['类别', '结构性存款', '大额存单', '定期存款', '外币理财', '活期理财', '贵金属理财', '权益类理财']
 
-        bank_struct_data = prod_struct_data[bank_struct_columns]
-        bank_struct_data = bank_struct_data.to_dict(orient='records')
+        bank_data1 = prod_struct_data[prod_struct_data['类别'] == bank1]
+        bank_data2 = prod_struct_data[prod_struct_data['类别'] == bank2]
+        bank_data12 = pd.concat([bank_data1, bank_data2], axis=0)
+        bank_struct_data = bank_data12.to_dict(orient='records')
 
         # 产品利率分析
         interest_rate_dim = '类别'
@@ -212,6 +216,8 @@ def comparison():
         bank_contract_data = prod_contract_data[prod_contract_columns]
         bank_contract_data = bank_contract_data.to_dict(orient='records')
 
+        stack_dict =  {'类别': prod_list}
+
         response_object = {
             'bank_names': bank_names,
             'struct_dim': bank_struct_dim,
@@ -220,10 +226,13 @@ def comparison():
             'interest_columns': interest_rate_columns,
             'interest_data': bank_interest_data,
             'contract_columns': prod_contract_columns,
-            'contract_data': bank_contract_data
+            'contract_data': bank_contract_data,
+            'stack_dict': stack_dict
         }
 
-        print(response_object)
+        print(response_object['stack_dict'])
+        print(response_object['struct_columns'])
+        print(response_object['struct_data'])
 
     else:
         response_object = '出错啦'

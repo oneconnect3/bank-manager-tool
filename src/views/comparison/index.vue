@@ -36,7 +36,7 @@
               <div slot="header" class="clearfix">
                 <span>产品结构对比</span>
               </div>
-              <ve-histogram :data="chartData1" :settings="chartSettings"></ve-histogram>
+              <ve-histogram :data="chartData1" :settings="chartSettings0"></ve-histogram>
             </el-card>
           </el-col>
           <el-col :span="12">
@@ -56,7 +56,7 @@
             <div slot="header" class="clearfix">
               <span>产品利率对比</span>
             </div>
-            <ve-histogram :data="chartData2" :settings="chartSettings"></ve-histogram>
+            <ve-histogram :data="chartData2" :settings="chartSettings1"></ve-histogram>
           </el-card>
         </el-col>
         <el-col :span="12">
@@ -72,7 +72,7 @@
             <div slot="header" class="clearfix">
               <span>产品期限对比</span>
             </div>
-            <ve-histogram :data="chartData3" :settings="chartSettings"></ve-histogram>
+            <ve-histogram :data="chartData3" :settings="chartSettings1"></ve-histogram>
           </el-card>
         </el-col>
         <el-col :span="12">
@@ -98,12 +98,15 @@ import VCharts from "v-charts";
 
 export default {
   data() {
-    this.chartSettings = {
+    this.chartSettings0 = {
+      stack: {}
+    }
+    this.chartSettings1 = {
       metrics: [],
       dimension: ["类别"],
       xAxisName: [""],
       yAxisName: ["占比（%）"]
-    };
+    }
     return {
       showResults: false,
       bank: {
@@ -135,7 +138,8 @@ export default {
         .post(path, prod.bank)
         .then(response => {
           var rs = response.data;
-          this.chartSettings.metrics = rs.bank_names;
+          this.chartSettings0.stack = rs.stack_dict;
+          this.chartSettings1.metrics = rs.bank_names;
           prod.chartData1.columns = rs.struct_columns;
           prod.chartData1.rows = rs.struct_data;
 

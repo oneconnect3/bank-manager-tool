@@ -44,8 +44,12 @@
       <el-tab-pane label="第三步" name="thirdTab">
         <div style="margin-top: 20px">
           <span>参数5：</span>
-          <el-input v-model="input" placeholder="请输入内容" style="width: 200px"></el-input>
+          <el-checkbox v-model="checked">备选项</el-checkbox>
         </div>
+        <div style="margin-top: 20px">
+          <span>参数6：</span>
+          <el-checkbox v-model="checked">备选项</el-checkbox>
+        </div>        
         <el-button type="primary" @click="subBtn();" style="margin-top: 30px">提交</el-button>
       </el-tab-pane>
       <el-tab-pane label="结果" name="result" href="#result">

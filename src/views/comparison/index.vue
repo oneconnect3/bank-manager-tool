@@ -26,29 +26,28 @@
       <el-option label="广发银行" value="广发银行"></el-option>
       <el-option label="华夏银行" value="华夏银行"></el-option>
     </el-select>&nbsp&nbsp&nbsp&nbsp
-    <el-button type="primary" round @click="onsubmit();">一键对比</el-button>
+    <el-button type="primary" @click="onsubmit();">一键对比</el-button>
+    <el-button @click="download">Download PDF</el-button>
 
-    <div style="margin-top: 20px">
-      <div>
-        <el-row type="flex">
-          <el-col :span="12">
-            <el-card shadow="hover">
-              <div slot="header" class="clearfix">
-                <span>产品结构对比</span>
-              </div>
-              <ve-histogram :data="chartData1" :settings="chartSettings0"></ve-histogram>
-            </el-card>
-          </el-col>
-          <el-col :span="12">
-            <el-card shadow="hover">
-              <div slot="header" class="clearfix">
-                <span>卡片名称</span>
-              </div>
-              <div v-for="o in 4" :key="o" class="text item">{{'列表内容 ' + o }}</div>
-            </el-card>
-          </el-col>
-        </el-row>
-      </div>
+    <div ref="content" style="margin-top: 20px">
+      <el-row type="flex">
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <div slot="header" class="clearfix">
+              <span>产品结构对比</span>
+            </div>
+            <ve-histogram :data="chartData1" :settings="chartSettings0" :extend="chartExtend"></ve-histogram>
+          </el-card>
+        </el-col>
+        <el-col :span="12">
+          <el-card shadow="hover">
+            <div slot="header" class="clearfix">
+              <span>卡片名称</span>
+            </div>
+            <div v-for="o in 4" :key="o" class="text item">{{'列表内容 ' + o }}</div>
+          </el-card>
+        </el-col>
+      </el-row>
 
       <el-row>
         <el-col :span="12">
@@ -95,22 +94,36 @@
 <script>
 import axios from "axios";
 import VCharts from "v-charts";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
 export default {
   data() {
     this.chartSettings0 = {
       stack: {},
-      series : [
+      series: [
         {
           barWidth: 10
         }
+      ],
+      yAxisName: ["占比（%）"]
+    };
+    this.chartExtend = {
+      series: {
+        barMaxWidth: 150
+      },
+      dataZoom: [
+        {
+          type: "inside"
+        }
       ]
-    }
+    };
     this.chartSettings1 = {
       metrics: [],
       dimension: ["类别"],
       xAxisName: [""],
       yAxisName: ["占比（%）"]
-    }
+    };
     return {
       showResults: false,
       bank: {
@@ -157,6 +170,27 @@ export default {
           alert("Error " + error);
         });
       this.showResults = true;
+    },
+    downloadWithCSS() {
+      const doc = new jsPDF();
+      /** WITH CSS */
+      var canvasElement = document.createElement("canvas");
+      html2canvas(this.$refs.content, { canvas: canvasElement }).then(function(
+        canvas
+      ) {
+        const img = canvas.toDataURL("image/jpeg", 0.8);
+        doc.addImage(img, "JPEG", 20, 20);
+        doc.save("sample.pdf");
+      });
+    },
+    download() {
+      const doc = new jsPDF();
+      /** WITHOUT CSS */
+      const contentHtml = this.$refs.content.innerHTML;
+      doc.fromHTML(contentHtml, 15, 15, {
+        width: 170
+      });
+      doc.save("sample.pdf");
     }
   },
   mounted: function() {

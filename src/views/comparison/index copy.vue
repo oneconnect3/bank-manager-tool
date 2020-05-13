@@ -36,13 +36,13 @@
               <div slot="header" class="clearfix">
                 <span>产品结构对比</span>
               </div>
-              <ve-histogram :data="chartData1" :settings="chartSettings0"></ve-histogram>
+              <ve-histogram :data="chartData1" :settings="chartSettings"></ve-histogram>
             </el-card>
           </el-col>
           <el-col :span="12">
             <el-card shadow="hover">
               <div slot="header" class="clearfix">
-                <span>卡片名称</span>
+                <span>结论</span>
               </div>
               <div v-for="o in 4" :key="o" class="text item">{{'列表内容 ' + o }}</div>
             </el-card>
@@ -50,13 +50,15 @@
         </el-row>
       </div>
 
-      <el-row>
+      <el-row style="margin-top: 20px">
         <el-col :span="12">
-          <el-card shadow="hover">
+          <!-- <el-card shadow="hover" style="background: #eef1f6"> -->
+                      <el-card shadow="hover">
+
             <div slot="header" class="clearfix">
               <span>产品利率对比</span>
             </div>
-            <ve-histogram :data="chartData2" :settings="chartSettings1"></ve-histogram>
+            <ve-histogram :data="chartData2" :settings="chartSettings"></ve-histogram>
           </el-card>
         </el-col>
         <el-col :span="12">
@@ -66,13 +68,13 @@
         </el-col>
       </el-row>
 
-      <el-row type="flex">
+      <el-row style="margin-top: 20px">
         <el-col :span="12">
           <el-card shadow="hover">
             <div slot="header" class="clearfix">
               <span>产品期限对比</span>
             </div>
-            <ve-histogram :data="chartData3" :settings="chartSettings1"></ve-histogram>
+            <ve-histogram :data="chartData3" :settings="chartSettings"></ve-histogram>
           </el-card>
         </el-col>
         <el-col :span="12">
@@ -95,22 +97,15 @@
 <script>
 import axios from "axios";
 import VCharts from "v-charts";
+
 export default {
   data() {
-    this.chartSettings0 = {
-      stack: {},
-      series : [
-        {
-          barWidth: 10
-        }
-      ]
-    }
-    this.chartSettings1 = {
+    this.chartSettings = {
       metrics: [],
       dimension: ["类别"],
       xAxisName: [""],
       yAxisName: ["占比（%）"]
-    }
+    };
     return {
       showResults: false,
       bank: {
@@ -131,6 +126,7 @@ export default {
       }
     };
   },
+
   methods: {
     onsubmit() {
       var prod = this;
@@ -141,14 +137,16 @@ export default {
         .post(path, prod.bank)
         .then(response => {
           var rs = response.data;
-          this.chartSettings0.stack = rs.stack_dict;
-          this.chartSettings1.metrics = rs.bank_names;
+          this.chartSettings.metrics = rs.bank_names;
           prod.chartData1.columns = rs.struct_columns;
           prod.chartData1.rows = rs.struct_data;
+
           prod.chartData2.columns = rs.interest_columns;
           prod.chartData2.rows = rs.interest_data;
+
           prod.chartData3.columns = rs.contract_columns;
           prod.chartData3.rows = rs.contract_data;
+
           // alert(
           //   "Success " + response.status + ", " + response.data + ", " + msg
           // );

@@ -88,7 +88,7 @@
         :data="prod_list"
         stripe
         fit
-        height="650px"
+        height="620px"
         :header-cell-style="{background:'#eef1f6',color:'#606266'}"
       >
         <el-table-column prop="name" label="产品名称"></el-table-column>
@@ -111,7 +111,7 @@
                   <!-- <img :src="scope.row.all_info[0].img_url" /> -->
                 </div>
                 <div style="margin-top: 10px;">
-                  <span>【{{ scope.row.all_info[0].name }}】</span>
+                  <span class="pop_name">【{{ scope.row.all_info[0].name }}】</span>
                 </div>
               </div>
               <el-table
@@ -184,6 +184,15 @@
 }
 .input-with-select .el-input-group__prepend {
   background-color: #fff;
+}
+
+.el-popover {
+  background: #C6D7E3 !important;
+}
+
+.pop_name {
+  font-weight: bold;
+  font-size: 18px;
 }
 </style>
 

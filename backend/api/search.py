@@ -160,7 +160,7 @@ def search():
 
 @app.route('/getCmp', methods=['GET', 'POST'])
 def comparison():
-    prod_struct_data = pd.read_csv('../data/prod_struct_data.csv')
+    prod_struct_data = pd.read_csv('../data/prod_struct_data.csv', encoding='gbk')
     interest_rate_data = pd.read_csv('../data/interest_rate_data.csv', encoding='gbk')
     prod_contract_data = pd.read_csv('../data/prod_contract_data.csv', encoding='gbk')
 
@@ -236,6 +236,31 @@ def comparison():
 
     else:
         response_object = '出错啦'
+
+    return jsonify(response_object)
+
+
+@app.route('/getPred', methods=['GET', 'POST'])
+def prod_predict():
+
+    response_object = {}
+    if request.method == 'POST':
+        args = request.get_json()
+        
+        arg1 = args['arg1']
+        arg2 = args['arg2']
+        arg3 = args['arg3']
+
+        rs = arg1 + arg2 + arg3
+
+        response_object = {
+            "args": args
+        }
+
+    else:
+        response_object = '出错啦'
+
+    print(response_object)
 
     return jsonify(response_object)
 

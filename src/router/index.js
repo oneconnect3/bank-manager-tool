@@ -82,11 +82,21 @@ export const constantRoutes = [
   {
     path: '/prediction',
     component: Layout,
+    name: '测一测',
+    meta: {
+      title: '测一测',
+      icon: 'eye'
+    },
     children: [
       {
-        path: 'index',
-        component: () => import('@/views/prediction/index'),
-        meta: { title: '测一测', icon: 'eye' }
+        path: 'ts',
+        component: () => import('@/views/prediction/ts'),
+        meta: { title: '时间序列', icon: 'eye-open' }
+      },
+      {
+        path: 'struct',
+        component: () => import('@/views/prediction/struct'),
+        meta: { title: '结构化数据', icon: 'table'}
       }
     ]
   },

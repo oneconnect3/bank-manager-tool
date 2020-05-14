@@ -27,7 +27,7 @@
       <el-option label="华夏银行" value="华夏银行"></el-option>
     </el-select>&nbsp&nbsp&nbsp&nbsp
     <el-button type="primary" @click="onsubmit();">一键对比</el-button>
-    <el-button @click="download">Download PDF</el-button>
+    <el-button type="success" @click="downloadWithCSS">下载报告</el-button>
 
     <div ref="content" style="margin-top: 20px">
       <el-row type="flex">
@@ -101,22 +101,20 @@ export default {
   data() {
     this.chartSettings0 = {
       stack: {},
-      series: [
-        {
-          barWidth: 10
-        }
-      ],
       yAxisName: ["占比（%）"]
     };
     this.chartExtend = {
       series: {
         barMaxWidth: 150
       },
-      dataZoom: [
-        {
-          type: "inside"
+      toolip: {
+        trigger: 'axis',
+        formatter(params) {
+          for (x in params) {
+            return params[x].x + "%";
+          }
         }
-      ]
+      }
     };
     this.chartSettings1 = {
       metrics: [],
@@ -174,23 +172,12 @@ export default {
     downloadWithCSS() {
       const doc = new jsPDF();
       /** WITH CSS */
-      var canvasElement = document.createElement("canvas");
-      html2canvas(this.$refs.content, { canvas: canvasElement }).then(function(
-        canvas
-      ) {
-        const img = canvas.toDataURL("image/jpeg", 0.8);
-        doc.addImage(img, "JPEG", 20, 20);
+      var canvasElement = document.createElement('canvas');
+      html2canvas(this.$refs.content, { canvas: canvasElement }).then(function (canvas) {
+        const img = canvas.toDataURL("image/jpeg", 1.0);
+        doc.addImage(img,'JPEG',0.5,2);
         doc.save("sample.pdf");
       });
-    },
-    download() {
-      const doc = new jsPDF();
-      /** WITHOUT CSS */
-      const contentHtml = this.$refs.content.innerHTML;
-      doc.fromHTML(contentHtml, 15, 15, {
-        width: 170
-      });
-      doc.save("sample.pdf");
     }
   },
   mounted: function() {

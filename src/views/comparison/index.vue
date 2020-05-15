@@ -42,7 +42,7 @@
         <el-col :span="12">
           <el-card shadow="hover">
             <div slot="header" class="clearfix">
-              <span>卡片名称</span>
+              <span>对比分析</span>
             </div>
             <div v-for="o in 4" :key="o" class="text item">{{'列表内容 ' + o }}</div>
           </el-card>
@@ -60,7 +60,7 @@
         </el-col>
         <el-col :span="12">
           <el-card shadow="hover">
-            <span>结论</span>
+            <span>对比分析</span>
           </el-card>
         </el-col>
       </el-row>
@@ -76,7 +76,7 @@
         </el-col>
         <el-col :span="12">
           <el-card shadow="hover">
-            <span>结论</span>
+            <span>对比分析</span>
           </el-card>
         </el-col>
       </el-row>
@@ -88,6 +88,10 @@
 <style>
 .input-with-select .el-input-group__prepend {
   background-color: #fff;
+}
+
+span {
+  font-weight: bold;
 }
 </style>
 

@@ -2,6 +2,7 @@ import pandas as pd
 from flask_cors import CORS
 from flask import Flask, jsonify, request, send_from_directory, render_template
 import json
+# from insights import gene_insights
 
 app = Flask(__name__)
 
@@ -218,6 +219,10 @@ def comparison():
 
         stack_dict =  {'类别': prod_list}
 
+
+        # 生成insights
+        # insights1, insights2, insights3 = gene_insights(bank1, bank2)
+
         response_object = {
             'bank_names': bank_names,
             'struct_dim': bank_struct_dim,
@@ -227,7 +232,10 @@ def comparison():
             'interest_data': bank_interest_data,
             'contract_columns': prod_contract_columns,
             'contract_data': bank_contract_data,
-            'stack_dict': stack_dict
+            'stack_dict': stack_dict,
+            # 'insights1': insights1,
+            # 'insights2': insights2,
+            # 'insights3': insights3
         }
 
         print(response_object['stack_dict'])

@@ -248,6 +248,34 @@ def comparison():
     return jsonify(response_object)
 
 
+@app.route('/getTS', methods=['GET', 'POST'])
+def ts_predict():
+
+    response_object = {}
+    if request.method == 'POST':
+        args = request.get_json()
+        print(args)
+        
+        arg1 = args['pred_prod']
+        arg2 = args['pred_days']
+
+        rs = arg1 + str(arg2)
+
+        response_object = {
+            "args": rs
+        }
+
+    else:
+        response_object = '出错啦'
+
+    # print(response_object)
+
+    return jsonify(response_object)
+
+
+
+
+
 @app.route('/getPred', methods=['GET', 'POST'])
 def prod_predict():
 

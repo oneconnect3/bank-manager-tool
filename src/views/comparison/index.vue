@@ -1,7 +1,7 @@
 <template>
   <el-main>
     <span>&nbsp 请选择本行：</span>
-    <el-select v-model="bank.bank1" placeholder="本行">
+    <el-select v-model="bank.bank1" placeholder="平安银行">
       <el-option label="招商银行" value="招商银行"></el-option>
       <el-option label="光大银行" value="光大银行"></el-option>
       <el-option label="兴业银行" value="兴业银行"></el-option>
@@ -14,7 +14,7 @@
       <el-option label="华夏银行" value="华夏银行"></el-option>
     </el-select>
     <span>&nbsp&nbsp&nbsp&nbsp 对标行：</span>
-    <el-select v-model="bank.bank2" placeholder="对标行">
+    <el-select v-model="bank.bank2" placeholder="招商银行">
       <el-option label="招商银行" value="招商银行"></el-option>
       <el-option label="光大银行" value="光大银行"></el-option>
       <el-option label="兴业银行" value="兴业银行"></el-option>
@@ -30,9 +30,9 @@
     <el-button type="success" @click="downloadWithCSS">下载报告</el-button>
 
     <div ref="content" style="margin-top: 20px">
-      <el-row type="flex">
+      <el-row :gutter="26">
         <el-col :span="12">
-          <el-card shadow="hover">
+          <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
             <div slot="header" class="clearfix">
               <span>产品结构对比</span>
             </div>
@@ -40,18 +40,31 @@
           </el-card>
         </el-col>
         <el-col :span="12">
-          <el-card shadow="hover">
+          <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
             <div slot="header" class="clearfix">
               <span>对比分析</span>
             </div>
-            <div v-for="o in 4" :key="o" class="text item">{{'列表内容 ' + o }}</div>
+            <div>
+              <el-row>
+                <el-tag>{{ insights.insight1_1_title }}</el-tag>
+                <p>{{ insights.insight1_1 }}</p>
+              </el-row>
+              <el-row style="margin-top: 15px">
+                <el-tag>{{ insights.insight1_2_title }}</el-tag>
+                <p>{{ insights.insight1_2 }}</p>
+              </el-row>
+              <el-row style="margin-top: 15px">
+                <el-tag>{{ insights.insight1_3_title }}</el-tag>
+                <p>{{ insights.insight1_3 }}</p>
+              </el-row>
+            </div>
           </el-card>
         </el-col>
       </el-row>
 
-      <el-row>
+      <el-row style="margin-top: 20px" :gutter="26">
         <el-col :span="12">
-          <el-card shadow="hover">
+          <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
             <div slot="header" class="clearfix">
               <span>产品利率对比</span>
             </div>
@@ -59,15 +72,27 @@
           </el-card>
         </el-col>
         <el-col :span="12">
-          <el-card shadow="hover">
-            <span>对比分析</span>
+          <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
+            <div slot="header" class="clearfix">
+              <span>对比分析</span>
+            </div>
+            <div>
+              <el-row>
+                <el-tag>{{ insights.insight3_1_title }}</el-tag>
+                <p>{{ insights.insight3_1 }}</p>
+              </el-row>
+              <el-row style="margin-top: 15px">
+                <el-tag>{{ insights.insight3_2_title }}</el-tag>
+                <p>{{ insights.insight3_2 }}</p>
+              </el-row>
+            </div>
           </el-card>
         </el-col>
       </el-row>
 
-      <el-row type="flex">
+      <el-row style="margin-top: 20px" :gutter="26">
         <el-col :span="12">
-          <el-card shadow="hover">
+          <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
             <div slot="header" class="clearfix">
               <span>产品期限对比</span>
             </div>
@@ -75,8 +100,20 @@
           </el-card>
         </el-col>
         <el-col :span="12">
-          <el-card shadow="hover">
-            <span>对比分析</span>
+          <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
+            <div slot="header" class="clearfix">
+              <span>对比分析</span>
+            </div>
+            <div>
+              <el-row>
+                <el-tag>{{ insights.insight2_1_title }}</el-tag>
+                <p>{{ insights.insight2_1 }}</p>
+              </el-row>
+              <el-row style="margin-top: 15px">
+                <el-tag>{{ insights.insight2_2_title }}</el-tag>
+                <p>{{ insights.insight2_2 }}</p>
+              </el-row>
+            </div>
           </el-card>
         </el-col>
       </el-row>
@@ -90,8 +127,22 @@
   background-color: #fff;
 }
 
-span {
+.span {
   font-weight: bold;
+}
+
+p {
+  line-height: 24px;
+}
+
+.grid-content {
+  border-radius: 4px;
+  min-height: 36px;
+}
+
+.el-tag {
+  font-weight: bold;
+  font-size: 16px;
 }
 </style>
 
@@ -112,7 +163,7 @@ export default {
         barMaxWidth: 150
       },
       toolip: {
-        trigger: 'axis',
+        trigger: "axis",
         formatter(params) {
           for (x in params) {
             return params[x].x + "%";
@@ -143,7 +194,8 @@ export default {
       chartData3: {
         columns: [],
         rows: []
-      }
+      },
+      insights: {}
     };
   },
   methods: {
@@ -164,6 +216,7 @@ export default {
           prod.chartData2.rows = rs.interest_data;
           prod.chartData3.columns = rs.contract_columns;
           prod.chartData3.rows = rs.contract_data;
+          prod.insights = rs.insights;
           // alert(
           //   "Success " + response.status + ", " + response.data + ", " + msg
           // );
@@ -174,13 +227,22 @@ export default {
       this.showResults = true;
     },
     downloadWithCSS() {
+      var bk = this;
       const doc = new jsPDF();
       /** WITH CSS */
-      var canvasElement = document.createElement('canvas');
-      html2canvas(this.$refs.content, { canvas: canvasElement }).then(function (canvas) {
-        const img = canvas.toDataURL("image/jpeg", 1.0);
-        doc.addImage(img,'JPEG',0.5,2);
-        doc.save("sample.pdf");
+      var canvasElement = document.createElement("canvas");
+      // window.html2canvas = html2canvas;
+      html2canvas(this.$refs.content, { 
+        canvas: canvasElement,
+        scale: 0.4 }).then(function(
+        canvas
+      ) {
+        const img = canvas.toDataURL("image/jpeg", 1);
+        doc.addImage(img, "PNG", 5, 8);
+        var bank1 = bk.bank.bank1;
+        var bank2 = bk.bank.bank2;
+        var timestamp = (new Date()).getTime();
+        doc.save(bank1 + "_" + bank2 + "_银行对标报告_" + timestamp + ".pdf");
       });
     }
   },

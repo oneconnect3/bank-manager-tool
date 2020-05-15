@@ -2,7 +2,7 @@ import pandas as pd
 from flask_cors import CORS
 from flask import Flask, jsonify, request, send_from_directory, render_template
 import json
-# from insights import gene_insights
+from insights import gene_insights
 
 app = Flask(__name__)
 
@@ -25,7 +25,7 @@ def search():
     response_object = {}
     if request.method == 'POST':
         keyword = request.get_json()
-        print(keyword)
+        # print(keyword)
 
         bank_name = keyword['bank_name']
         prod_type = keyword['prod_type']
@@ -33,7 +33,7 @@ def search():
         duration = keyword['duration']
         prod_name = keyword['prod_name']
 
-        if ((bank_name == '') & (prod_type == '') & (prod_return == '') & (duration == '')):
+        if ((bank_name == '') & (prod_type == '') & (prod_return == '') & (duration == '') & (prod_name == '')):
             df = df.sample(20)
 
         if bank_name == '不限':
@@ -60,6 +60,7 @@ def search():
         prod_rs['预期收益率(%)'] = prod_rs['预期收益率(%)'].astype(float)
         prod_rs['委托管理期(月)'] = prod_rs['委托管理期(月)'].astype(float)
         prod_rs['委托币种起始金额'] = prod_rs['委托币种起始金额'].astype(float)
+
 
         if bank_name != '':
             prod_rs = prod_rs[prod_rs['发行银行'] == bank_name]
@@ -187,10 +188,10 @@ def comparison():
         bank2 = bank_names['bank2']
 
         if bank1 == '':
-            bank1 = '招商银行'
+            bank1 = '平安银行'
 
         if bank2 == '':
-            bank2 = '平安银行'
+            bank2 = '招商银行'
 
         bank_names = [bank1, bank2]
 
@@ -221,7 +222,8 @@ def comparison():
 
 
         # 生成insights
-        # insights1, insights2, insights3 = gene_insights(bank1, bank2)
+        insights = gene_insights(bank1, bank2)
+        print(insights)
 
         response_object = {
             'bank_names': bank_names,
@@ -233,14 +235,12 @@ def comparison():
             'contract_columns': prod_contract_columns,
             'contract_data': bank_contract_data,
             'stack_dict': stack_dict,
-            # 'insights1': insights1,
-            # 'insights2': insights2,
-            # 'insights3': insights3
+            'insights': insights 
         }
 
-        print(response_object['stack_dict'])
-        print(response_object['struct_columns'])
-        print(response_object['struct_data'])
+        # print(response_object['stack_dict'])
+        # print(response_object['struct_columns'])
+        # print(response_object['struct_data'])
 
     else:
         response_object = '出错啦'
@@ -268,7 +268,7 @@ def prod_predict():
     else:
         response_object = '出错啦'
 
-    print(response_object)
+    # print(response_object)
 
     return jsonify(response_object)
 

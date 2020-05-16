@@ -22,7 +22,7 @@
     <el-input-number v-model="pred_info.pred_days" @change="handleChange" :min="1" :max="100" label="描述文字"></el-input-number>&nbsp&nbsp&nbsp&nbsp
     <el-button type="primary" @click="onsubmit();">一键预测</el-button>
     <div style="margin-top: 20px">
-        <span>{{ test }}</span>
+      <ve-line :data="chartData" :settings="chartSettings"></ve-line>
     </div>
 
   </el-main>
@@ -43,8 +43,11 @@ export default {
           pred_prod: "产品1",
           pred_days: 5
       },
-      test: ""
-    };
+      chartData: {
+        columns: [],
+        rows: []
+      }
+      };
   },
   methods: {
     onsubmit() {
@@ -56,7 +59,8 @@ export default {
         .post(path, prod.pred_info)
         .then(response => {
           var rs = response.data;
-          prod.test = rs.args;
+          prod.chartData.columns = ['时间', '预测值', '置信下限', '置信上限'];
+          prod.chartData.rows = rs.result;
           // alert(
           //   "Success " + response.status + ", " + response.data + ", " + msg
           // );

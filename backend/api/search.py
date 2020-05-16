@@ -1,8 +1,19 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on May 4 10:11:43 2020
+
+@author: Tianyu
+"""
+
 import pandas as pd
 from flask_cors import CORS
 from flask import Flask, jsonify, request, send_from_directory, render_template
 import json
+import pickle 
 from insights import gene_insights
+from predict import get_series
+from ts_fbprophet import ts_prediction
 
 app = Flask(__name__)
 
@@ -56,11 +67,10 @@ def search():
         prod_rs = df[['产品名称', '发行银行', '投资类型',
                       '委托币种起始金额', '预期收益率(%)', '委托管理期(月)', '委托币种', '是否保本',
                       '发行起始日期', '发行终止日期', '可否质押', '图片地址', '客户是否有权提前赎回',
-                      '银行是否有权提前终止', '适用地区', '产品管理费', '付息周期(月)']]                     
+                      '银行是否有权提前终止', '适用地区', '产品管理费', '付息周期(月)']]
         prod_rs['预期收益率(%)'] = prod_rs['预期收益率(%)'].astype(float)
         prod_rs['委托管理期(月)'] = prod_rs['委托管理期(月)'].astype(float)
         prod_rs['委托币种起始金额'] = prod_rs['委托币种起始金额'].astype(float)
-
 
         if bank_name != '':
             prod_rs = prod_rs[prod_rs['发行银行'] == bank_name]
@@ -132,19 +142,18 @@ def search():
         # 若字段内容过长，则只保留前100个字
         # prod_rs['re_rule'] = prod_rs['re_rule'].astype(str).str[100]
 
-
         # 单个产品的详情
         # prod_rs['all_info'] = prod_rs['name'].apply(lambda x: prod_rs[prod_rs['name'] == x][[
         #                                             'name', 'bank', 'type', 'currency', 'if_safe',
         #                                             'start_date', 'end_date', 'if_impawn', 'img_url',
         #                                             'if_redeem', 'if_end', 'area', 'fee', 'cycle',
         #                                             're_rule', 'target', 'risk']].to_dict(orient='records'))
-        
+
         prod_rs['all_info'] = prod_rs['name'].apply(lambda x: prod_rs[prod_rs['name'] == x][[
                                                     'name', 'bank', 'type', 'currency', 'if_safe',
                                                     'start_date', 'end_date', 'if_impawn', 'img_url',
                                                     'if_redeem', 'if_end', 'area', 'fee', 'cycle']].to_dict(orient='records'))
-        
+
         prod_json = prod_rs.to_dict(orient='records')
 
         prod_cnt = prod_rs.shape[0]
@@ -162,23 +171,26 @@ def search():
 
 @app.route('/getCmp', methods=['GET', 'POST'])
 def comparison():
-    prod_struct_data = pd.read_csv('../data/prod_struct_data.csv', encoding='gbk')
-    interest_rate_data = pd.read_csv('../data/interest_rate_data.csv', encoding='gbk')
-    prod_contract_data = pd.read_csv('../data/prod_contract_data.csv', encoding='gbk')
-
+    prod_struct_data = pd.read_csv(
+        '../data/prod_struct_data.csv', encoding='gbk')
+    interest_rate_data = pd.read_csv(
+        '../data/interest_rate_data.csv', encoding='gbk')
+    prod_contract_data = pd.read_csv(
+        '../data/prod_contract_data.csv', encoding='gbk')
 
     bank_list = ['招商银行', '光大银行', '兴业银行', '平安银行', '浙商银行',
-    '民生银行', '浦发银行', '中信银行', '广发银行', '华夏银行']
+                 '民生银行', '浦发银行', '中信银行', '广发银行', '华夏银行']
 
     prod_list = ['结构性存款', '大额存单', '定期存款', '外币理财', '活期理财', '贵金属理财', '权益类理财']
 
     for bank in bank_list:
-        interest_rate_data[bank] = interest_rate_data[bank].apply(lambda x: x*100)
-        prod_contract_data[bank] = prod_contract_data[bank].apply(lambda x: x*100)
+        interest_rate_data[bank] = interest_rate_data[bank].apply(
+            lambda x: x*100)
+        prod_contract_data[bank] = prod_contract_data[bank].apply(
+            lambda x: x*100)
 
     for col in prod_list:
         prod_struct_data[col] = prod_struct_data[col].apply(lambda x: x*100)
-
 
     response_object = {}
     if request.method == 'POST':
@@ -197,7 +209,8 @@ def comparison():
 
         # 产品类别分析
         bank_struct_dim = '类别'
-        bank_struct_columns = ['类别', '结构性存款', '大额存单', '定期存款', '外币理财', '活期理财', '贵金属理财', '权益类理财']
+        bank_struct_columns = ['类别', '结构性存款', '大额存单',
+                               '定期存款', '外币理财', '活期理财', '贵金属理财', '权益类理财']
 
         bank_data1 = prod_struct_data[prod_struct_data['类别'] == bank1]
         bank_data2 = prod_struct_data[prod_struct_data['类别'] == bank2]
@@ -218,8 +231,7 @@ def comparison():
         bank_contract_data = prod_contract_data[prod_contract_columns]
         bank_contract_data = bank_contract_data.to_dict(orient='records')
 
-        stack_dict =  {'类别': prod_list}
-
+        stack_dict = {'类别': prod_list}
 
         # 生成insights
         insights = gene_insights(bank1, bank2)
@@ -235,7 +247,7 @@ def comparison():
             'contract_columns': prod_contract_columns,
             'contract_data': bank_contract_data,
             'stack_dict': stack_dict,
-            'insights': insights 
+            'insights': insights
         }
 
         # print(response_object['stack_dict'])
@@ -255,14 +267,18 @@ def ts_predict():
     if request.method == 'POST':
         args = request.get_json()
         print(args)
-        
+
         arg1 = args['pred_prod']
         arg2 = args['pred_days']
 
-        rs = arg1 + str(arg2)
+        series = pd.read_csv('../data/sales_data.csv', encoding='gbk')
+        fb_train = series[['ds', arg1]]
+        fb_train.columns = ['ds', 'y']
+
+        pred_rs = ts_prediction(fb_train, arg2)
 
         response_object = {
-            "args": rs
+            "result": pred_rs
         }
 
     else:
@@ -273,25 +289,33 @@ def ts_predict():
     return jsonify(response_object)
 
 
-
-
-
 @app.route('/getPred', methods=['GET', 'POST'])
 def prod_predict():
+
+    #Loading mapper
+    bank_info = pd.read_csv('../data/bank_info.csv')
 
     response_object = {}
     if request.method == 'POST':
         args = request.get_json()
-        
+
         arg1 = args['arg1']
-        arg2 = args['arg2']
-        arg3 = args['arg3']
+        arg2 = int(args['arg2'])
+        arg3 = int(args['arg3'])
+        arg4 = int(args['arg4'])
+       
+        result = get_series(arg1, arg2, arg3, arg4,bank_info)
+        # args = str(arg1)+str(arg2)+str(arg3)+str(arg4)
+        print(result)
 
-        rs = arg1 + arg2 + arg3
-
+        # rate_series, start_amount_series, term_series
+        # origin_pt
         response_object = {
-            "args": args
+            "result": result
         }
+
+        print(response_object)
+
 
     else:
         response_object = '出错啦'

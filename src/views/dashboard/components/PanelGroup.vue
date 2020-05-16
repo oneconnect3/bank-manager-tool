@@ -60,9 +60,9 @@ export default {
   },
   data(){
     return {
-      new_prod_day: 3,
-      new_prod_week: 18,
-      prod_total: 300
+      new_prod_day: 33,
+      new_prod_week: 372,
+      prod_total: 8536
     }
   },
   methods: {

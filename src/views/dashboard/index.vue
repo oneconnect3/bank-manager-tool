@@ -59,33 +59,33 @@ const barChartData = {
     ]
 };
 const pieChartData1 = {
-    title:'日分布',
+    title:'现在售产品种类分布',
     legendData:['固定收益类','权益类','衍生品类','混合类'],
     seriesData:[
-      {name:'结构性存款',value:10},
-      {name:'权益类',value:8},
-      {name:'衍生品类',value:14},
-      {name:'混合类',value:16}
+      {name:'结构性存款',value:20},
+      {name:'权益类',value:18},
+      {name:'衍生品类',value:24},
+      {name:'混合类',value:38}
       ]
 };
 const pieChartData2 = {
-    title:'月分布',
-    legendData:['固定收益类','权益类','衍生品类','混合类'],
+    title:'现在售产品期限分布',
+    legendData:['3个月以下','3~6个月','6~12个月','12个月以上'],
     seriesData:[
-      {name:'固定收益类',value:10},
-      {name:'权益类',value:8},
-      {name:'衍生品类',value:14},
-      {name:'混合类',value:16}
+      {name:'3个月以下',value:25},
+      {name:'3~6个月',value:30},
+      {name:'6~12个月',value:27},
+      {name:'12个月以上',value:18}
       ]
 };
 const pieChartData3 = {
-    title:'年分布',
-    legendData:['固定收益类','权益类','衍生品类','混合类'],
+    title:'现在售产品利率分布',
+    legendData:['2%以下','2%~3.5%','3.5%~5%','5%以上'],
     seriesData:[
-      {name:'固定收益类',value:10},
-      {name:'权益类',value:8},
-      {name:'衍生品类',value:14},
-      {name:'混合类',value:16}
+      {name:'2%以下',value:20},
+      {name:'2%~3.5%',value:38},
+      {name:'3.5%~5%',value:30},
+      {name:'5%以上',value:12}
       ]
 };
 

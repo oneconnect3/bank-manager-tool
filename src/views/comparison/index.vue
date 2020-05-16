@@ -30,19 +30,25 @@
     <el-button type="success" @click="downloadWithCSS">下载报告</el-button>
 
     <div ref="content" style="margin-top: 20px">
-      <el-row :gutter="26">
-        <el-col :span="12">
-          <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
+      <el-row :gutter="26" style="display: flex; justify-content: center; align-items: center">
+        <el-col :span="11">
+          <el-card class="grid-content bg-purple" shadow="hover" style="height: 500px">
             <div slot="header" class="clearfix">
               <span>产品结构对比</span>
             </div>
             <ve-histogram :data="chartData1" :settings="chartSettings0" :extend="chartExtend"></ve-histogram>
           </el-card>
         </el-col>
-        <el-col :span="12">
-          <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
+        <el-col :span="1">
+          <i
+            class="el-icon-d-arrow-right"
+            style="display: flex; justify-content: center; font-size: 24px"
+          ></i>
+        </el-col>
+        <el-col :span="11">
+          <el-card class="grid-content bg-purple" shadow="hover" style="height: 500px">
             <div slot="header" class="clearfix">
-              <span>对比分析</span>
+              <span>主要观察</span>
             </div>
             <div>
               <el-row>
@@ -52,6 +58,7 @@
               <el-row style="margin-top: 15px">
                 <el-tag>{{ insights.insight1_2_title }}</el-tag>
                 <p>{{ insights.insight1_2 }}</p>
+                <p id="insight1_2"></p>
               </el-row>
               <el-row style="margin-top: 15px">
                 <el-tag>{{ insights.insight1_3_title }}</el-tag>
@@ -61,9 +68,9 @@
           </el-card>
         </el-col>
       </el-row>
-
-      <el-row style="margin-top: 20px" :gutter="26">
-        <el-col :span="12">
+      <el-divider></el-divider>
+      <el-row style="display: flex; justify-content: center; align-items: center" :gutter="26">
+        <el-col :span="11">
           <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
             <div slot="header" class="clearfix">
               <span>产品利率对比</span>
@@ -71,10 +78,16 @@
             <ve-histogram :data="chartData2" :settings="chartSettings1"></ve-histogram>
           </el-card>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="1">
+          <i
+            class="el-icon-d-arrow-right"
+            style="display: flex; justify-content: center; font-size: 24px"
+          ></i>
+        </el-col>
+        <el-col :span="11">
           <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
             <div slot="header" class="clearfix">
-              <span>对比分析</span>
+              <span>主要观察</span>
             </div>
             <div>
               <el-row>
@@ -89,9 +102,9 @@
           </el-card>
         </el-col>
       </el-row>
-
-      <el-row style="margin-top: 20px" :gutter="26">
-        <el-col :span="12">
+      <el-divider></el-divider>
+      <el-row style="display: flex; justify-content: center; align-items: center" :gutter="26">
+        <el-col :span="11">
           <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
             <div slot="header" class="clearfix">
               <span>产品期限对比</span>
@@ -99,10 +112,16 @@
             <ve-histogram :data="chartData3" :settings="chartSettings1"></ve-histogram>
           </el-card>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="1">
+          <i
+            class="el-icon-d-arrow-right"
+            style="display: flex; justify-content: center; font-size: 24px"
+          ></i>
+        </el-col>
+        <el-col :span="11">
           <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
             <div slot="header" class="clearfix">
-              <span>对比分析</span>
+              <span>主要观察</span>
             </div>
             <div>
               <el-row>
@@ -144,7 +163,10 @@ p {
   font-weight: bold;
   font-size: 16px;
 }
+
 </style>
+
+<script src="../../assets/js/jquery-3.1.1.min.js"></script>
 
 <script>
 import axios from "axios";
@@ -217,6 +239,7 @@ export default {
           prod.chartData3.columns = rs.contract_columns;
           prod.chartData3.rows = rs.contract_data;
           prod.insights = rs.insights;
+
           // alert(
           //   "Success " + response.status + ", " + response.data + ", " + msg
           // );
@@ -232,16 +255,15 @@ export default {
       /** WITH CSS */
       var canvasElement = document.createElement("canvas");
       // window.html2canvas = html2canvas;
-      html2canvas(this.$refs.content, { 
+      html2canvas(this.$refs.content, {
         canvas: canvasElement,
-        scale: 0.4 }).then(function(
-        canvas
-      ) {
+        scale: 0.4
+      }).then(function(canvas) {
         const img = canvas.toDataURL("image/jpeg", 1);
         doc.addImage(img, "PNG", 5, 8);
         var bank1 = bk.bank.bank1;
         var bank2 = bk.bank.bank2;
-        var timestamp = (new Date()).getTime();
+        var timestamp = new Date().getTime();
         doc.save(bank1 + "_" + bank2 + "_银行对标报告_" + timestamp + ".pdf");
       });
     }

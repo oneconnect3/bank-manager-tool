@@ -1,10 +1,21 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on May 13 19:23:10 2020
+
+@author: Tianyu
+"""
+
+
 import pandas as pd
+
 
 def stand_pct(num):
     stand_num = num*100
     stand_rs = str(round(stand_num, 2)) + '%'
 
     return stand_rs
+
 
 def gene_insights(bank1, bank2):
 
@@ -48,21 +59,22 @@ def gene_insights(bank1, bank2):
     B_A3 = bank2_struct['A3'].iloc[0]
     A_A4 = bank1_struct['A4'].iloc[0]
     B_A4 = bank2_struct['A4'].iloc[0]
+    A_A5 = bank1_struct['A5'].iloc[0]
     B_A5 = bank2_struct['A5'].iloc[0]
 
     # 特色产品
-    if A_A3 <= B_A3:
+    if A_A3 < B_A3:
         insight1_2_title = '特色产品市场竞争力不足'
-        insight1_2 = '与{bank2}相比，其现有产品{B_A4}市场占有率高达{B_A5}，同类产品{bank1}竞争优势明显不足，而{bank1}自身的特色产品{A_A4}，没有起到产品承接互补的作用，非常缺乏针对高价值客户的钩子产品和特色财富产品；'.format(
-            bank1=bank1, bank2=bank2, B_A4=(B_A4), B_A5=stand_pct(B_A5), A_A4=(A_A4))
+        insight1_2 = '与{bank2}相比，其现有产品{B_A4}市场占有率高达{A_A5},同类产品{bank1}竞争优势明显不足，而{bank1}自身的特色产品{A_A4}，没有起到产品承接互补的作用，非常缺乏针对高价值客户的钩子产品和特色财富产品；'.format(
+            bank1=bank1, bank2=bank2, B_A4=B_A4, A_A5=stand_pct(A_A5), A_A4=A_A4)
 
     if A_A3 > B_A3:
         insight1_2_title = '特色产品优势明显'
         if A_A22 > 0:
-            insight1_2 = '与{bank2}相比，{bank1}的零售金融产品集中于理财类产品，产品供给满足参财富客户多元化的投资需求，而且{bank1}的理财产品占比远超市场平均水平的{A_A22}；'.format(
+            insight1_2 = '与{bank2}相比，{bank1}的零售金融产品集中于理财类产品，产品供给满足参财富客户多元化的投资需求，而且{bank1}的理财产品占比远超{A_A22}；'.format(
                 bank1=bank1, bank2=bank2, A_A22=stand_pct(A_A22))
         else:
-            insight1_2 = '与{bank2}相比，{bank1}的零售金融产品集中于理财类产品，产品供给满足参财富客户多元化的投资需求，而且{bank1}的理财产品不足市场平均水平的{A_A22}；'.format(
+            insight1_2 = '与{bank2}相比，{bank1}的零售金融产品集中于理财类产品，产品供给满足参财富客户多元化的投资需求，而且{bank1}的理财产品占比不足市场平均水平的{A_A22}；'.format(
                 bank1=bank1, bank2=bank2, A_A22=stand_pct(A_A22))
 
     # 提取关键指标
@@ -75,10 +87,10 @@ def gene_insights(bank1, bank2):
         bank1=bank1, bank2=bank2, A_A7=(A_A7), A_A6=stand_pct(A_A6))
 
     # 产品期限分布
-    A_A1 = prod_contract_data[prod_contract_data['类别']=='A1'][bank1].iloc[0]
-    B_A1 = prod_contract_data[prod_contract_data['类别']=='A1'][bank2].iloc[0]
-    A_A2 = prod_contract_data[prod_contract_data['类别']=='A2'][bank1].iloc[0]
-    B_A2 = prod_contract_data[prod_contract_data['类别']=='A2'][bank2].iloc[0]
+    A_A1 = prod_contract_data[prod_contract_data['类别'] == 'A1'][bank1].iloc[0]
+    B_A1 = prod_contract_data[prod_contract_data['类别'] == 'A1'][bank2].iloc[0]
+    A_A2 = prod_contract_data[prod_contract_data['类别'] == 'A2'][bank1].iloc[0]
+    B_A2 = prod_contract_data[prod_contract_data['类别'] == 'A2'][bank2].iloc[0]
 
     if A_A1 > B_A1:
         insight2_1_title = '短期产品占比较高'
@@ -131,7 +143,7 @@ def gene_insights(bank1, bank2):
     insights = {
         'insight1_1_title': insight1_1_title,
         'insight1_1': insight1_1,
-        'insight1_2_title': insight1_2_title,        
+        'insight1_2_title': insight1_2_title,
         'insight1_2': insight1_2,
         'insight1_3_title': insight1_3_title,
         'insight1_3': insight1_3,

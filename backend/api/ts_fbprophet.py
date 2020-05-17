@@ -34,7 +34,20 @@ def ts_prediction(fb_train, pred_dura):
     yhat_upper = forecast['yhat_upper']
     yhat_lower = forecast['yhat_lower']
 
-    return pred_rs.to_dict(orient='records')
+    fb_train.columns = ['时间', '预测值']
+    fb_train['置信下限'] = None
+    fb_train['置信上限'] = None 
+
+    print(fb_train)
+
+    rs = pd.concat([fb_train, pred_rs], axis=0)
+    rs = rs.to_dict(orient='records')
+    print(rs)
+
+    # lst1 = fb_train.to_dict(orient='records')
+    # lst2 = pred_rs.to_dict(orient='records')
+
+    return rs
 
 
 # # 时序预测NLG

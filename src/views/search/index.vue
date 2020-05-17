@@ -76,10 +76,10 @@
         <el-option label="6~12个月" value="6~12个月"></el-option>
         <el-option label="12个月以上" value="12个月以上"></el-option>
       </el-select>
-      <el-button slot="append" icon="el-icon-search" @click="onsubmit();"></el-button>
+      <el-button slot="append" icon="el-icon-search" @click="onsubmit();">搜索</el-button>
     </el-input>
 
-    <el-card class="box-card" v-if="showResults" style="margin-top: 10px">
+    <el-card class="box-card" v-if="showResults" style="margin-top: 10px;">
       <div slot="header" class="clearfix">
         <span>搜索结果:</span>
       </div>
@@ -117,7 +117,7 @@
               <el-table
                 border
                 :data="scope.row.all_info"
-                :header-cell-style="{background:'#eef1f6',color:'#606266'}"
+                :header-cell-style="{background:'#eef1f6',color:'#E2F0FA'}"
               >
                 <el-table-column property="bank" label="发行银行"></el-table-column>
                 <el-table-column property="type" label="产品类型"></el-table-column>
@@ -187,7 +187,7 @@
 }
 
 .el-popover {
-  background: #C6D7E3 !important;
+  background: #c6d7e3 !important;
 }
 
 .pop_name {

@@ -27,12 +27,16 @@
       <el-option label="华夏银行" value="华夏银行"></el-option>
     </el-select>&nbsp&nbsp&nbsp&nbsp
     <el-button type="primary" @click="onsubmit();">一键对比</el-button>
-    <el-button type="success" @click="downloadWithCSS">下载报告</el-button>
+    <el-button type="warning" @click="downloadWithCSS">下载报告</el-button>
 
-    <div ref="content" style="margin-top: 20px">
+    <div ref="content" style="margin-top: 50px">
       <el-row :gutter="26" style="display: flex; justify-content: center; align-items: center">
         <el-col :span="11">
-          <el-card class="grid-content bg-purple" shadow="hover" style="height: 500px">
+          <el-card
+            class="grid-content bg-purple"
+            shadow="hover"
+            style="height: 500px; background: #E2F0FA"
+          >
             <div slot="header" class="clearfix">
               <span>产品结构对比</span>
             </div>
@@ -46,7 +50,11 @@
           ></i>
         </el-col>
         <el-col :span="11">
-          <el-card class="grid-content bg-purple" shadow="hover" style="height: 500px">
+          <el-card
+            class="grid-content bg-purple"
+            shadow="hover"
+            style="height: 500px; background: #FFEBDD"
+          >
             <div slot="header" class="clearfix">
               <span>主要观察</span>
             </div>
@@ -71,7 +79,11 @@
       <el-divider></el-divider>
       <el-row style="display: flex; justify-content: center; align-items: center" :gutter="26">
         <el-col :span="11">
-          <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
+          <el-card
+            class="grid-content bg-purple"
+            shadow="hover"
+            style="height: 450px; background: #E2F0FA"
+          >
             <div slot="header" class="clearfix">
               <span>产品利率对比</span>
             </div>
@@ -85,7 +97,11 @@
           ></i>
         </el-col>
         <el-col :span="11">
-          <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
+          <el-card
+            class="grid-content bg-purple"
+            shadow="hover"
+            style="height: 450px; background: #FFEBDD"
+          >
             <div slot="header" class="clearfix">
               <span>主要观察</span>
             </div>
@@ -105,7 +121,11 @@
       <el-divider></el-divider>
       <el-row style="display: flex; justify-content: center; align-items: center" :gutter="26">
         <el-col :span="11">
-          <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
+          <el-card
+            class="grid-content bg-purple"
+            shadow="hover"
+            style="height: 450px; background: #E2F0FA"
+          >
             <div slot="header" class="clearfix">
               <span>产品期限对比</span>
             </div>
@@ -119,7 +139,11 @@
           ></i>
         </el-col>
         <el-col :span="11">
-          <el-card class="grid-content bg-purple" shadow="hover" style="height: 450px">
+          <el-card
+            class="grid-content bg-purple"
+            shadow="hover"
+            style="height: 450px; background: #FFEBDD"
+          >
             <div slot="header" class="clearfix">
               <span>主要观察</span>
             </div>
@@ -164,6 +188,10 @@ p {
   font-size: 16px;
 }
 
+.clearfix {
+  font-weight: bold;
+  font-size: 18px;
+}
 </style>
 
 <script src="../../assets/js/jquery-3.1.1.min.js"></script>
@@ -176,6 +204,13 @@ import html2canvas from "html2canvas";
 
 export default {
   data() {
+    this.grid = {
+      show: true,
+      top: 50,
+      left: 10,
+      backgroundColor: "#E2F0FA"
+      // borderColor: '#000'
+    };
     this.chartSettings0 = {
       stack: {},
       yAxisName: ["占比（%）"]

@@ -271,11 +271,18 @@ def ts_predict():
         arg1 = args['pred_prod']
         arg2 = args['pred_days']
 
+        if arg1 == '':
+            arg1 = '产品1'
+
         series = pd.read_csv('../data/sales_data.csv', encoding='gbk')
         fb_train = series[['ds', arg1]]
         fb_train.columns = ['ds', 'y']
 
         pred_rs = ts_prediction(fb_train, arg2)
+
+        # print(origin_ts)
+        # print("============")
+        # print(pred_rs)
 
         response_object = {
             "result": pred_rs
@@ -303,6 +310,9 @@ def prod_predict():
         arg2 = int(args['arg2'])
         arg3 = int(args['arg3'])
         arg4 = int(args['arg4'])
+
+        if arg1 == '':
+            arg1 = '平安银行'
        
         result = get_series(arg1, arg2, arg3, arg4,bank_info)
         # args = str(arg1)+str(arg2)+str(arg3)+str(arg4)

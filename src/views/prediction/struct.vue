@@ -1,11 +1,11 @@
 <template>
   <el-main>
     <div>
-      <div style="margin-top: 20px;">
-        <div>
-          <p>请选择您的银行，根据你的输入，我们将自动匹配您所在银行的规模，大小，成立年限等数据，以达更精准的预测效果。</p>
-        </div>
-        <span>银行：</span>
+      <p>请选择您的银行，根据你的输入，我们将自动匹配您所在银行的规模，大小，成立年限等数据，以达更精准的预测效果。</p>
+    </div>
+    <el-card style="margin-top: 30px;">
+      <div>
+        <span>选择银行：</span>
         <el-select v-model="args.arg1" placeholder="平安银行" style="width: 200px">
           <el-option label="农业银行" value="农业银行"></el-option>
           <el-option label="中信银行" value="中信银行"></el-option>
@@ -33,44 +33,65 @@
               <el-option label="平安银行" value="平安银行"></el-option>
             </el-select>
       </div>-->
-    </div>
 
-    <div style="margin-top: 20px">
-      <span>预计收益率（%）：</span>
-      <el-input v-model="args.arg2" placeholder="请输入内容"></el-input>
-    </div>
-    <div style="margin-top: 20px">
-      <span>起投金额（RMB）：</span>
-      <el-input v-model="args.arg3" placeholder="请输入内容"></el-input>
-    </div>
-    <div style="margin-top: 20px">
-      <span>产品期限（月）：</span>
-      <el-input v-model="args.arg4" placeholder="请输入内容"></el-input>
-    </div>
-    <el-button type="primary" @click="subBtn();" style="margin-top: 30px">提交</el-button>
-
-    <div style="margin-top: 20px" v-if="showResults">
-      <div>
-        <p>根据您指定的相关参数，预估该产品将在 {{ pred_rs }} 个月内售罄。</p>
+      <div style="margin-top: 20px">
+        <el-row>
+          <span>预计收益率（%）：</span>
+          <el-input v-model="args.arg2" placeholder="请输入内容" style="width: 200px"></el-input>
+        </el-row>
       </div>
-      <el-row>
-        <el-col :span="8">
-          <div class="grid-content bg-purple">
-            <ve-line :data="chartData1" :settings="chartSettings1"></ve-line>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content bg-purple-light">
-            <ve-line :data="chartData2" :settings="chartSettings2"></ve-line>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="grid-content bg-purple">
-            <ve-line :data="chartData3" :settings="chartSettings3"></ve-line>
-          </div>
-        </el-col>
-      </el-row>
-    </div>
+      <div style="margin-top: 20px">
+        <span>起投金额（RMB）：</span>
+        <el-input v-model="args.arg3" placeholder="请输入内容" style="width: 200px"></el-input>
+      </div>
+      <div style="margin-top: 20px">
+        <span>产品期限（月）：</span>
+        <el-input v-model="args.arg4" placeholder="请输入内容" style="width: 200px"></el-input>
+      </div>
+      <el-button type="primary" icon="el-icon-thumb" @click="subBtn();" style="margin-top: 30px">提交</el-button>
+    </el-card>
+    <el-card>
+      <div style="margin-top: 20px" v-if="showResults">
+        <div slot="header" class="clearfix">
+          <span>预测结果：</span>
+        </div>
+        <el-row style="margin-top: 30px">
+          <el-col :span="8">
+            <div class="grid-content bg-purple">
+              <ve-line
+                :data="chartData1"
+                :settings="chartSettings1"
+                :loading="loading"
+                :grid="grid"
+              ></ve-line>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="grid-content bg-purple-light">
+              <ve-line
+                :data="chartData2"
+                :settings="chartSettings2"
+                :loading="loading"
+                :grid="grid"
+              ></ve-line>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="grid-content bg-purple">
+              <ve-line
+                :data="chartData3"
+                :settings="chartSettings3"
+                :loading="loading"
+                :grid="grid"
+              ></ve-line>
+            </div>
+          </el-col>
+        </el-row>
+        <div>
+          <p>根据您指定的相关参数，预估该产品将在 {{ pred_rs }} 个月内售罄。</p>
+        </div>
+      </div>
+    </el-card>
   </el-main>
 </template>
 
@@ -82,27 +103,34 @@ export default {
   data() {
     this.chartSettings1 = {
       stack: {},
-      xAxisName: ["预计收益率（%）"],
+      xAxisName: ["预计收益率（%）"]
       // yAxisName: ["售罄时长（月）"],
-    };    
+    };
     this.chartSettings2 = {
       stack: {},
-      xAxisName: ["起投金额（RMB）"],
+      xAxisName: ["起投金额（RMB）"]
       // yAxisName: ["售罄时长（月）"]
-    };  
+    };
     this.chartSettings3 = {
       stack: {},
-      xAxisName: ["产品期限（月）"],
+      xAxisName: ["产品期限（月）"]
       // yAxisName: ["售罄时长（月）"]
-    };          
+    };
+    this.grid = {
+      show: true,
+      top: 50,
+      left: 10,
+      backgroundColor: "#E2F0FA"
+      // borderColor: '#000'
+    };
     return {
       showResults: false,
       pred_rs: "",
       args: {
         arg1: "",
         arg2: 6,
-        arg3: 6,
-        arg4: 6
+        arg3: 100,
+        arg4: 3
       },
       result: "",
       chartData1: {
@@ -131,11 +159,11 @@ export default {
         .then(response => {
           var rs = response.data;
           prod.pred_rs = rs.result.origin_y;
-          prod.chartData1.columns = ['预计收益率（%）', '售罄时长（月）'];
+          prod.chartData1.columns = ["预计收益率（%）", "售罄时长（月）"];
           prod.chartData1.rows = rs.result.rate_series;
-          prod.chartData2.columns = ['起投金额（RMB）', '售罄时长（月）'];
+          prod.chartData2.columns = ["起投金额（RMB）", "售罄时长（月）"];
           prod.chartData2.rows = rs.result.start_amount_series;
-          prod.chartData3.columns = ['产品期限（月）', '售罄时长（月）'];
+          prod.chartData3.columns = ["产品期限（月）", "售罄时长（月）"];
           prod.chartData3.rows = rs.result.term_series;
           // alert(prod.chartData1.rows)
         })
@@ -143,6 +171,9 @@ export default {
           alert("Error " + error);
         });
     }
+  },
+  mounted: function() {
+    this.subBtn();
   }
 };
 </script>

@@ -25,6 +25,7 @@
         @change="handleChange"
         :min="1"
         :max="100"
+        :extend="chartExtend"
         label="描述文字"
       ></el-input-number>&nbsp&nbsp&nbsp&nbsp
       <el-button type="primary" @click="onsubmit();">一键预测</el-button>

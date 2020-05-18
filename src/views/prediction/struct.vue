@@ -33,7 +33,10 @@
               <el-option label="平安银行" value="平安银行"></el-option>
             </el-select>
       </div>-->
-
+      <div style="margin-top: 20px">
+        <span>发售总量（RMB）：</span>
+        <el-input v-model="args.arg0" placeholder="请输入内容" style="width: 200px"></el-input>
+      </div>
       <div style="margin-top: 20px">
         <el-row>
           <span>预计收益率（%）：</span>
@@ -61,8 +64,8 @@
               <ve-line
                 :data="chartData1"
                 :settings="chartSettings1"
-                :loading="loading"
                 :grid="grid"
+                :mark-point="markPoint1"
               ></ve-line>
             </div>
           </el-col>
@@ -71,7 +74,6 @@
               <ve-line
                 :data="chartData2"
                 :settings="chartSettings2"
-                :loading="loading"
                 :grid="grid"
               ></ve-line>
             </div>
@@ -81,7 +83,6 @@
               <ve-line
                 :data="chartData3"
                 :settings="chartSettings3"
-                :loading="loading"
                 :grid="grid"
               ></ve-line>
             </div>
@@ -101,6 +102,14 @@ import VCharts from "v-charts";
 
 export default {
   data() {
+    this.markPoint1 = {
+      data: [
+        {
+          name: "您选择的值",
+          xAxis: 6
+        }
+      ]
+    };
     this.chartSettings1 = {
       stack: {},
       xAxisName: ["预计收益率（%）"]
@@ -127,6 +136,7 @@ export default {
       showResults: false,
       pred_rs: "",
       args: {
+        arg0: 10000000,
         arg1: "",
         arg2: 6,
         arg3: 100,

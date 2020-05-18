@@ -78,8 +78,12 @@
       </el-select>
       <el-button slot="append" icon="el-icon-search" @click="onsubmit();">搜索</el-button>
     </el-input>
+    <el-row style="margin-top: 10px;">
+      <span>找不到您的产品？欢迎帮我们补充 :) &nbsp</span>
+      <el-button type="primary" icon="el-icon-thumb" @click="subBtn();" style="margin-top: 30px">补充产品信息</el-button>      
+    </el-row>
 
-    <el-card class="box-card" v-if="showResults" style="margin-top: 10px;">
+    <el-card class="box-card" v-if="showResults" style="margin-top: 30px;">
       <div slot="header" class="clearfix">
         <span>搜索结果:</span>
       </div>

@@ -7,8 +7,7 @@ git clone https://github.com/cyansoul/bank-manager-tool.git
 cd bank-manager-tool
 
 # 启动Flask服务
-cd backend/api
-python search.py
+python backend/api/main.py
 
 # 安装依赖
 npm install
@@ -54,15 +53,15 @@ npm run dev
 ![比一比](/screenshots/comparison.png)
 
 ## 4、测一测
-
+### 1）产品销量预测
 ``` bash
-1）产品销量预测：使用Prophet算法，结合时间序列分解和机器学习，用各产品的历史销量数据作为训练集，给出未来的销量趋势预测曲线，并提供置信上限和置信下限作为参考。
+使用Prophet算法，结合时间序列分解和机器学习，用各产品的历史销量数据作为训练集，给出未来的销量趋势预测曲线，并提供置信上限和置信下限作为参考。
 ```
 
 ![比一比](/screenshots/ts_pred.png)
-
+### 2）产品售罄时长预测
 ``` bash
-2）产品售罄时长预测：用户可自定义银行、产品发售总量、预计收益率、起售金额、产品期限五个参数，一键获取预测结果。
+用户可自定义银行、产品发售总量、预计收益率、起售金额、产品期限五个参数，一键获取预测结果。
 
 并基于用户所填写的参数，对收益率、起售金额、产品期限三个字段进行左右区间的拓展，给出对应的预测值曲线，增强参数的可解释性。
 ```
@@ -77,3 +76,8 @@ npm run dev
 2）各银行产品结构数据
 3）产品销量数据
 ```
+
+## 爬虫方案
+![scraper1](/screenshots/scraper1.png)
+![scraper2](/screenshots/scraper2.png)
+![scraper3](/screenshots/scraper3.png)

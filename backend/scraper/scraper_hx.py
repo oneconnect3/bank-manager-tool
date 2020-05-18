@@ -7,16 +7,16 @@ bank-product-tool
 @author: Tianyu
 """
 
+from selenium import webdriver  # 导入库
+from lxml import etree
+import time
+import json
 import warnings
 
 warnings.filterwarnings('ignore')
 
-import json
-import time
-from lxml import etree
-from selenium import webdriver  # 导入库
 
-
+# 启动模拟浏览器
 def ini_browser():
     options = webdriver.ChromeOptions()
     options.add_argument("start-maximized")
@@ -34,18 +34,20 @@ def ini_browser():
 def load_page(browser, load_cnt, sleep_time):
     i = 0
     while i < load_cnt:
-        browser.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+        browser.execute_script(
+            "window.scrollTo(0, document.body.scrollHeight)")
         time.sleep(3)
         i += 1
     time.sleep(sleep_time)
 
 
+# 单页信息爬取
 def single_page_scraper(browser1, browser2, json_file):
-
 
     tree1 = etree.HTML(browser1.page_source)  # 获取源码
 
-    link_list = tree1.xpath("//*[@class='c_content']/div[@id='cList']//div[@class='prdBlock']")
+    link_list = tree1.xpath(
+        "//*[@class='c_content']/div[@id='cList']//div[@class='prdBlock']")
 
     # 开始爬取并保存全部产品信息
     n = 0
@@ -55,7 +57,8 @@ def single_page_scraper(browser1, browser2, json_file):
             info = {}  # 单个产品的信息字典
             #     print(link.xpath("//table[@class='buyArea']/tbody/tr/td/a[@class='viewMore']//@href")[0])
             print(n)
-            link = tree1.xpath("//table[@class='buyArea']/tbody/tr/td/a[@class='viewMore']//@href")[n]
+            link = tree1.xpath(
+                "//table[@class='buyArea']/tbody/tr/td/a[@class='viewMore']//@href")[n]
             prod_url = 'http://www.cmbchina.com' + link
             #     print(sub_link)
             browser2.get(prod_url)
@@ -86,20 +89,21 @@ def single_page_scraper(browser1, browser2, json_file):
                 f.write('\n')
 
         except Exception as e:
-            print(e);
+            print(e)
 
         all_prod.append(info)
         n += 1
 
 
+# 多页信息爬取
 def multi_page_scraper(browser1, browser2):
 
     # 产品列表页面链接
     base_url = 'http://www.cmbchina.com/cfweb/personal/ProdBySeries.aspx?code=010011'
     browser1.get(base_url)
 
-    p=1
-    while p<=10:
+    p = 1
+    while p <= 10:
         # 加载产品列表页面
         load_page(browser1, 5, 10)
         single_page_scraper(browser1, browser2, 'cmb_dep_prd.json')
@@ -115,4 +119,3 @@ if __name__ == '__main__':
     browser2 = ini_browser()
 
     multi_page_scraper(browser1, browser2)
-

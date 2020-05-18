@@ -15,7 +15,6 @@ import pickle
 # start_amount = 1000
 # term = 2
 
-
 def gen_sample(bank,rate,start_amount,term,bank_info):
     if rate-0.5>0:
         rates = np.arange(rate-0.5,rate+0.6,0.1)
@@ -91,12 +90,3 @@ def get_series(bank, rate, start_amount, term,bank_info):
 
     return response
     
-
-
-
-
-
-
-
-
-

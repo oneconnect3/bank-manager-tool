@@ -10,22 +10,22 @@ import pandas as pd
 from flask_cors import CORS
 from flask import Flask, jsonify, request, send_from_directory, render_template
 import json
-import pickle 
+import pickle
 from insights import gene_insights
 from predict import get_series
 from ts_fbprophet import ts_prediction
 
 app = Flask(__name__)
 
-# enable CORS
-CORS(app, resources={r"/*": {"origins": "*"}})   # 允许所有域名跨域
+# 允许跨域
+CORS(app, resources={r"/*": {"origins": "*"}})   
 
 
 @app.route('/')
 def hello_world():
     return 'Hello World!'
 
-
+# 查一查接口
 @app.route('/getProd', methods=['GET', 'POST'])
 def search():
     with open('../data/hx_dep_prd3.json', encoding='utf-8') as data_file:
@@ -168,7 +168,7 @@ def search():
 
     return jsonify(response_object)
 
-
+# 比一比接口
 @app.route('/getCmp', methods=['GET', 'POST'])
 def comparison():
     prod_struct_data = pd.read_csv(
@@ -259,7 +259,7 @@ def comparison():
 
     return jsonify(response_object)
 
-
+# 销量预测接口
 @app.route('/getTS', methods=['GET', 'POST'])
 def ts_predict():
 
@@ -295,11 +295,10 @@ def ts_predict():
 
     return jsonify(response_object)
 
-
+# 销售时长预测接口
 @app.route('/getPred', methods=['GET', 'POST'])
 def prod_predict():
 
-    #Loading mapper
     bank_info = pd.read_csv('../data/bank_info.csv')
 
     response_object = {}
@@ -313,19 +312,15 @@ def prod_predict():
 
         if arg1 == '':
             arg1 = '平安银行'
-       
-        result = get_series(arg1, arg2, arg3, arg4,bank_info)
-        # args = str(arg1)+str(arg2)+str(arg3)+str(arg4)
+
+        result = get_series(arg1, arg2, arg3, arg4, bank_info)
         print(result)
 
-        # rate_series, start_amount_series, term_series
-        # origin_pt
         response_object = {
             "result": result
         }
 
         print(response_object)
-
 
     else:
         response_object = '出错啦'

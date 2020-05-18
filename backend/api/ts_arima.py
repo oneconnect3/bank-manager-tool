@@ -13,11 +13,14 @@ import sklearn
 from statsmodels.tsa.arima_model import ARIMA
 from matplotlib import pyplot
 
+# 备用模型
+
 def predict(coef, history):
 	yhat = 0.0
 	for i in range(1, len(coef)+1):
 		yhat += coef[i-1] * history[-i]
 	return yhat
+
 
 def difference(dataset):
 	diff = list()
@@ -25,6 +28,7 @@ def difference(dataset):
 		value = dataset[i] - dataset[i - 1]
 		diff.append(value)
 	return np.array(diff)
+
 
 def arima_pred():
     X = series.values

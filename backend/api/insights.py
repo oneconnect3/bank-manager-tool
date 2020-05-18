@@ -6,10 +6,10 @@ Created on May 13 19:23:10 2020
 @author: Tianyu
 """
 
-
 import pandas as pd
 
 
+# 将小数转为百分比形式
 def stand_pct(num):
     stand_num = num*100
     stand_rs = str(round(stand_num, 2)) + '%'
@@ -17,6 +17,7 @@ def stand_pct(num):
     return stand_rs
 
 
+# 洞察结果规则
 def gene_insights(bank1, bank2):
 
     # 生成insights

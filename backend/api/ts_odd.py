@@ -10,6 +10,7 @@ import pandas as pd
 import numpy as np
 from fbprophet import Prophet
 
+# 备用异常检测方案
 
 def ts_prediction(df, pred_dura):
     

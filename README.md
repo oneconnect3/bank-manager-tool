@@ -1,8 +1,28 @@
-## 
+## 快速开始
+``` bash
+# 克隆项目
+git clone https://github.com/cyansoul/bank-manager-tool.git
+
+# 进入项目目录
+cd bank-manager-tool
+
+# 启动Flask服务
+cd backend/api
+python search.py
+
+# 安装依赖
+npm install
+
+# 启动Vue服务
+npm run dev
+```
+
+浏览器访问：http://localhost:9527
 
 ## 产品架构
 ![产品架构](/src/assets/images/structure.png)
 
+# 功能
 
 ## 1、看一看（首页）
 

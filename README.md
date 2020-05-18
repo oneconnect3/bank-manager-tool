@@ -12,8 +12,6 @@
 
 ![看一看](/screenshots/dashboard.png)
 
-*****
-
 ## 2、查一查
 
 ``` bash
@@ -24,7 +22,6 @@
 
 ![查一查](/screenshots/search.png)
 
-*****
 
 ## 3、比一比
 
@@ -35,8 +32,6 @@
 ```
 
 ![比一比](/screenshots/comparison.png)
-
-*****
 
 ## 4、测一测
 
@@ -54,7 +49,6 @@
 
 ![比一比](/screenshots/struct_pred.png)
 
-*****
 
 ## 数据结构
 

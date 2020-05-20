@@ -11,6 +11,7 @@
         placeholder="发行银行"
         filterable
         :filter-method="dataFilter"
+        style="background: #1E90FF; color: white;"
       >
         <el-option label="发行银行" value="不限"></el-option>
         <el-option label="中国银行" value="中国银行"></el-option>
@@ -31,7 +32,7 @@
       <el-select
         v-model="search_keyword.prod_type"
         slot="prepend"
-        style="margin-left: 15px;"
+        style="background: #1E90FF; color: white"
         placeholder="产品类型"
         filterable
         :filter-method="dataFilter"
@@ -44,7 +45,7 @@
       <el-select
         v-model="search_keyword.prod_return"
         slot="prepend"
-        style="margin-left: 15px;"
+        style="background: #1E90FF; color: white"
         placeholder="收益率(%)"
         filterable
         :filter-method="dataFilter"
@@ -64,7 +65,7 @@
       <el-select
         v-model="search_keyword.duration"
         slot="prepend"
-        style="margin-left: 50px;"
+        style="background: #1E90FF; color: white"
         placeholder="产品期限(月)"
         filterable
         :filter-method="dataFilter"
@@ -76,11 +77,16 @@
         <el-option label="6~12个月" value="6~12个月"></el-option>
         <el-option label="12个月以上" value="12个月以上"></el-option>
       </el-select>
-      <el-button slot="append" icon="el-icon-search" @click="onsubmit();">搜索</el-button>
+      <el-button style="background: #1E90FF; color: white;" slot="append" icon="el-icon-search" @click="onsubmit();">搜索</el-button>
     </el-input>
     <el-row style="margin-top: 10px;">
       <span>找不到您的产品？欢迎帮我们补充 :) &nbsp</span>
-      <el-button type="primary" icon="el-icon-thumb" @click="subBtn();" style="margin-top: 30px">补充产品信息</el-button>      
+      <el-button
+        type="primary"
+        icon="el-icon-thumb"
+        @click="subBtn();"
+        style="margin-top: 30px"
+      >补充产品信息</el-button>
     </el-row>
 
     <el-card class="box-card" v-if="showResults" style="margin-top: 30px;">
@@ -226,7 +232,7 @@ export default {
       var prod = this;
       // var that = this;
       // 对应 Python 提供的接口，这里的地址填写下面服务器运行的地址，本地则为127.0.0.1，外网则为 your_ip_address
-      const path = "http://127.0.0.1:5000/getProd";
+      const path = "http://127.0.0.1:8080/getProd";
       axios
         .post(path, prod.search_keyword)
         .then(response => {

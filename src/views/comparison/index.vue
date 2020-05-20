@@ -260,7 +260,7 @@ export default {
       var prod = this;
       // var that = this;
       // 对应 Python 提供的接口，这里的地址填写下面服务器运行的地址，本地则为127.0.0.1，外网则为 your_ip_address
-      const path = "http://127.0.0.1:5000/getCmp";
+      const path = "http://127.0.0.1:8080/getCmp";
       axios
         .post(path, prod.bank)
         .then(response => {
